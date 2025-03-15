@@ -1,0 +1,23 @@
+x64/
+Voxel Engine 3D/x64/
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.idb
+*.tlog
+*.log
+*.cache
+
+.vscode/
+.vs/
+*.sdf
+*.opendb
+*.VC.db
+
+*.ipch
+*.iobj
+*.ipdb
+*.ncb
+*.user
+*.suo
