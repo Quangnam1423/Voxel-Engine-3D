@@ -8,6 +8,7 @@ Voxel Engine 3D/x64/
 *.tlog
 *.log
 *.cache
+*.dll
 
 .vscode/
 .vs/
