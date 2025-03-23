@@ -150,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Objects\Shader.cpp" />
+    <ClCompile Include="Source\Objects\Camera.cpp" />
     <ClCompile Include="Source\EngineManager\InputManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -159,6 +161,8 @@
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Objects\Shader.h" />
+    <ClInclude Include="Source\Objects\Camera.h" />
     <ClInclude Include="Source\EngineManager\InputManager.h" />
     <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\Singleton.h" />
