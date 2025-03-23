@@ -60,4 +60,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Shaders\VoxelFragment.shader" />
+    <None Include="Source\Shaders\VoxelVertex.shader" />
+  </ItemGroup>
 </Project>

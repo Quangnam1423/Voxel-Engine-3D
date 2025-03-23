@@ -169,6 +169,10 @@
     <ClInclude Include="Source\WindowConfig.h" />
     <ClInclude Include="Source\EngineManager\WindowManager.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Shaders\VoxelFragment.shader" />
+    <None Include="Source\Shaders\VoxelVertex.shader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
