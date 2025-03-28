@@ -150,6 +150,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\EngineManager\ResourceManager.cpp" />
+    <ClCompile Include="Source\fastnoiselifeImpl.cpp" />
+    <ClCompile Include="Source\Objects\Cube.cpp" />
     <ClCompile Include="Source\Objects\Shader.cpp" />
     <ClCompile Include="Source\Objects\Camera.cpp" />
     <ClCompile Include="Source\EngineManager\InputManager.cpp">
@@ -157,14 +160,18 @@
     </ClCompile>
     <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\glad.c" />
+    <ClCompile Include="Source\tsb_image_imple.cpp" />
     <ClCompile Include="Source\Voxel Engine 3D.cpp" />
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\EngineManager\ResourceManager.h" />
+    <ClInclude Include="Source\Objects\Cube.h" />
     <ClInclude Include="Source\Objects\Shader.h" />
     <ClInclude Include="Source\Objects\Camera.h" />
     <ClInclude Include="Source\EngineManager\InputManager.h" />
     <ClInclude Include="Source\Engine.h" />
+    <ClInclude Include="Source\Objects\Vertex.h" />
     <ClInclude Include="Source\Singleton.h" />
     <ClInclude Include="Source\WindowConfig.h" />
     <ClInclude Include="Source\EngineManager\WindowManager.h" />

@@ -11,6 +11,7 @@
 
 class Shader
 {
+public:
 	Shader(std::string vertexPath, std::string fragmentPath);
 	~Shader();
 
