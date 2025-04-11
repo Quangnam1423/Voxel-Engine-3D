@@ -32,4 +32,3 @@ public:
 private:
 	std::map<std::string, GLuint> m_textureMap;
 };
-

@@ -9,6 +9,8 @@
 
 //void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
+class Triangle;
+
 class Engine : public Singleton<Engine>
 {
 friend class Singleton<Engine>;
@@ -24,4 +26,5 @@ public:
 	}
 private:
 	GLFWwindow* m_window;
+	Triangle* m_triangle;
 };

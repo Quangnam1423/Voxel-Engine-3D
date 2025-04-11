@@ -13,14 +13,15 @@ class Shader;
 class Cube
 {
 public:
-	Cube();
+	Cube(const char* texturePath, const char* vertexShaderPath, const char* fragmentShaderPath);
 	~Cube();
-	void draw();
-
+	void draw(const glm::mat4& view, const glm::mat4& projection,  const glm::mat4& model);
+	void init(const char* texturePath, const char* vertexShaderPath, const char* fragmentShaderPath);
 	void setShader(Shader* shader);
 
 private:
 	Shader* m_shader;
+	GLuint m_textureID;
 	GLuint m_vao;
 	GLuint m_vbo;
 	GLuint m_ebo;

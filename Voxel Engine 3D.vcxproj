@@ -163,8 +163,10 @@
     <ClCompile Include="Source\tsb_image_imple.cpp" />
     <ClCompile Include="Source\Voxel Engine 3D.cpp" />
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
+    <ClCompile Include="Source\Objects\Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Objects\Offset.h" />
     <ClInclude Include="Source\EngineManager\ResourceManager.h" />
     <ClInclude Include="Source\Objects\Cube.h" />
     <ClInclude Include="Source\Objects\Shader.h" />
@@ -175,6 +177,11 @@
     <ClInclude Include="Source\Singleton.h" />
     <ClInclude Include="Source\WindowConfig.h" />
     <ClInclude Include="Source\EngineManager\WindowManager.h" />
+    <ClInclude Include="Source\Objects\Triangle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Shaders\triangle.frag" />
+    <None Include="Source\Shaders\triangle.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

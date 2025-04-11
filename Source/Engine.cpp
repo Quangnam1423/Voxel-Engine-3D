@@ -2,11 +2,15 @@
 
 #include "EngineManager/WindowManager.h"
 #include "EngineManager/InputManager.h"
+#include "Objects/Triangle.h"	
+#include "Objects/Shader.h"
+
 #include <iostream>
 
 Engine::Engine()
 {
 	m_window = nullptr;
+	m_triangle = nullptr;
 }
 
 Engine::~Engine()
@@ -36,6 +40,7 @@ void Engine::init()
 			glfwTerminate();
 			return;
 		}
+		glfwMakeContextCurrent(m_window);
 		WINDOW_MANAGER->setWindow(m_window);
 	}
 
@@ -52,6 +57,13 @@ void Engine::init()
 		glViewport(0, 0, 800, 600);
 		glfwSetFramebufferSizeCallback(m_window, Engine::framebuffer_size_callback);
 	}
+
+	//init triangle
+	{
+		m_triangle = new Triangle();
+		m_triangle->init();
+		m_triangle->setShader(new Shader("Source/Shaders/triangle.vert", "Source/Shaders/triangle.frag"));
+	}
 }
 
 void Engine::run()
@@ -61,6 +73,7 @@ void Engine::run()
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		m_triangle->draw();
 
 		WINDOW_MANAGER->render();
 		INPUT_MANAGER->handleEvent();
