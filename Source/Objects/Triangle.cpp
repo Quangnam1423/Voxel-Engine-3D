@@ -4,6 +4,7 @@
 
 Triangle::Triangle()
 {
+	m_shader = nullptr;
 }
 
 Triangle::~Triangle()
