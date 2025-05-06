@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Objects\Rectangle.cpp" />
     <ClCompile Include="Source\EngineManager\ResourceManager.cpp" />
     <ClCompile Include="Source\fastnoiselifeImpl.cpp" />
     <ClCompile Include="Source\Objects\Cube.cpp" />
@@ -161,11 +162,12 @@
     <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\tsb_image_imple.cpp" />
-    <ClCompile Include="Source\Voxel Engine 3D.cpp" />
+    <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
     <ClCompile Include="Source\Objects\Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Objects\Rectangle.h" />
     <ClInclude Include="Source\Objects\Offset.h" />
     <ClInclude Include="Source\EngineManager\ResourceManager.h" />
     <ClInclude Include="Source\Objects\Cube.h" />
@@ -180,6 +182,10 @@
     <ClInclude Include="Source\Objects\Triangle.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Source\Shaders\cube.frag" />
+    <None Include="Source\Shaders\cube.vert" />
+    <None Include="Source\Shaders\rectangle.frag" />
+    <None Include="Source\Shaders\rectangle.vert" />
     <None Include="Source\Shaders\triangle.frag" />
     <None Include="Source\Shaders\triangle.vert" />
   </ItemGroup>

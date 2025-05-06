@@ -10,25 +10,27 @@
 
 #define DATA ResourceManager::getInstance()
 
-enum class TEXTURE_EXTENSION
-{
-	PNG,
-	JPG,
-	JPEG,
-	TGA,
-	BMP,
-	UNKNOWN
-};
+std::string getFileExtension(const std::string& filename);
 
-class ResourceManager :public Singleton<ResourceManager>
+// get texture from resource manager by path of texture
+// if texture is not loaded, load it and return the texture id
+// else	return the texture id
+// if texture is not found, return -1
+
+// Resource Manager can not distingush between .png and .jpg
+// so that it will load the texture with the first extension found
+
+class ResourceManager : public Singleton<ResourceManager>
 {
 	friend class Singleton<ResourceManager>;
 public:
 	ResourceManager();
 	~ResourceManager();
-	bool loadTexture(const char* path, TEXTURE_EXTENSION extension);
-	GLuint getTexture(const char* path);
-	void deleteTexture(const char* path);	
+
+	GLuint getTexture(std::string texturePath);
+	bool loadTexture(std::string texturePath);
 private:
-	std::map<std::string, GLuint> m_textureMap;
+	std::map<std::string, GLuint> m_textures;
 };
+
+

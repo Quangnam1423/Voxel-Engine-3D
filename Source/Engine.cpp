@@ -2,15 +2,17 @@
 
 #include "EngineManager/WindowManager.h"
 #include "EngineManager/InputManager.h"
+#include "EngineManager/ResourceManager.h"
 #include "Objects/Triangle.h"	
 #include "Objects/Shader.h"
-
+#include "Objects/Cube.h"
+#include "Objects/Rectangle.h"
 #include <iostream>
 
 Engine::Engine()
 {
 	m_window = nullptr;
-	m_triangle = nullptr;
+	m_rectangle = nullptr;
 }
 
 Engine::~Engine()
@@ -58,11 +60,10 @@ void Engine::init()
 		glfwSetFramebufferSizeCallback(m_window, Engine::framebuffer_size_callback);
 	}
 
-	//init triangle
 	{
-		m_triangle = new Triangle();
-		m_triangle->init();
-		m_triangle->setShader(new Shader("Source/Shaders/triangle.vert", "Source/Shaders/triangle.frag"));
+		m_rectangle = new Rectangle();
+		m_rectangle->setShader(new Shader("Source/Shaders/rectangle.vert", "Source/Shaders/rectangle.frag"));
+		m_rectangle->setTexure(DATA->getTexture("Resource/Texture/container.jpg"));
 	}
 }
 
@@ -73,7 +74,8 @@ void Engine::run()
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		m_triangle->draw();
+
+		m_rectangle->draw();
 
 		WINDOW_MANAGER->render();
 		INPUT_MANAGER->handleEvent();

@@ -1,5 +1,13 @@
 #include "ResourceManager.h"
 
+
+// function to get the file extension from a file name
+std::string getFileExtension(const std::string& filename)
+{
+	std::filesystem::path path(filename);
+	return path.extension().string();
+}
+
 ResourceManager::ResourceManager()
 {
 
@@ -7,92 +15,68 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
-	for (auto it = m_textureMap.begin(); it != m_textureMap.end(); it++)
+	for (auto& texture : m_textures)
 	{
-		glDeleteTextures(1, &it->second);
+		glDeleteTextures(1, &texture.second);
 	}
-
-	m_textureMap.clear();
+	m_textures.clear();
 }
 
-bool ResourceManager::loadTexture(const char* path, TEXTURE_EXTENSION extension)
+GLuint ResourceManager::getTexture(std::string texturePath)
 {
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
-	if (data)
+	if (m_textures.find(texturePath) != m_textures.end())
 	{
-		GLenum format;
-		if (nrChannels == 1)
-			format = GL_RED;
-		else if (nrChannels == 3)
-			format = GL_RGB;
-		else if (nrChannels == 4)
-			format = GL_RGBA;
-		if (extension == TEXTURE_EXTENSION::PNG)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		}
-		else if (extension == TEXTURE_EXTENSION::JPG)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		}
-		glGenerateMipmap(GL_TEXTURE_2D);
+		return m_textures[texturePath];
 	}
 	else
 	{
-		std::cout << "Failed to load texture: " << path << std::endl;
-		stbi_image_free(data);
-		return false;
-	}
-	stbi_image_free(data);
-	m_textureMap[path] = texture;
-	return true;
-}
-
-GLuint ResourceManager::getTexture(const char* path)
-{
-	for (auto it : m_textureMap)
-	{
-		if (it.first == path)
+		if (loadTexture(texturePath))
 		{
-			return it.second;
+			return m_textures[texturePath];
+		}
+		else
+		{
+			std::cerr << "Failed to load texture: " << texturePath << std::endl;
+			return -1;
 		}
 	}
-
-	std::string ext = std::filesystem::path(path).extension().string();
-	
-	bool isPNG = (ext == ".png" || ext == ".PNG");
-	bool isJPG = (ext == ".jpg" || ext == ".jpeg" || ext == ".JPG" || ext == ".JPEG");
-
-	if (isPNG) {
-		TEXTURE_EXTENSION extension = TEXTURE_EXTENSION::PNG;
-		return loadTexture(path, extension);
-	}
-	else if (isJPG) {
-		TEXTURE_EXTENSION extension = TEXTURE_EXTENSION::JPG;
-		return loadTexture(path, extension);
-	}
-	else {
-		std::cout << "Unknown texture extension: " << ext << std::endl;
-		return 0;
-	}
-
-	return m_textureMap[path];
+	return 0;
 }
 
-void ResourceManager::deleteTexture(const char* path)
+bool ResourceManager::loadTexture(std::string texturePath)
 {
-	for (auto it : m_textureMap)
-	{
-		if (it.first == path)
-		{
-			glDeleteTextures(1, &it.second);
-			m_textureMap.erase(it.first);
-			break;
-		}
-	}
-	return;
+    if (m_textures.find(texturePath) != m_textures.end()) {
+        // Texture already loaded
+        return true;
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Load texture data
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        stbi_image_free(data);
+
+        // Store texture in the map
+        m_textures[texturePath] = textureID;
+        return true;
+    }
+    else {
+        std::cerr << "Failed to load texture: " << texturePath << std::endl;
+        stbi_image_free(data);
+        return false;
+    }
 }
