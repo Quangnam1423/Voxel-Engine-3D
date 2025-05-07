@@ -10,23 +10,25 @@
 
 class Shader;
 
-class Cube
+class Cube 
 {
-public:
-	Cube(const char* texturePath, const char* vertexShaderPath, const char* fragmentShaderPath);
-	~Cube();
-	void draw(const glm::mat4& view, const glm::mat4& projection,  const glm::mat4& model);
-	void init(const char* texturePath, const char* vertexShaderPath, const char* fragmentShaderPath);
-	void setShader(Shader* shader);
-
 private:
-	Shader* m_shader;
-	GLuint m_textureID;
-	GLuint m_vao;
-	GLuint m_vbo;
-	GLuint m_ebo;
-
 	std::vector<Vertex> m_vertices;
 	std::vector<GLuint> m_indices;
+	unsigned int m_vao, m_vbo, m_ebo;
+	GLuint m_textureID;
+	Shader* m_shader;
+public:
+	Cube();
+	~Cube();
+	void draw();
+	void cleanup();
+	void setShader(Shader* shader) { m_shader = shader; }
+	void setTexture(GLuint textureID) { m_textureID = textureID; }
+	std::vector<Vertex>& getVertices() { return m_vertices; }
+	std::vector<GLuint>& getIndices() { return m_indices; }
+	unsigned int getVao() { return m_vao; }
+	unsigned int getVbo() { return m_vbo; }
+	unsigned int getEbo() { return m_ebo; }
 };
 

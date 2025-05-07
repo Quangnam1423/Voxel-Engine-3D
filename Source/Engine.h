@@ -10,12 +10,12 @@
 //void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 class Triangle;
-class Cube;
 class Rectangle;
+class Cube;
 
 class Engine : public Singleton<Engine>
 {
-friend class Singleton<Engine>;
+	friend class Singleton<Engine>;
 public:
 	Engine();
 	~Engine();
@@ -28,5 +28,5 @@ public:
 	}
 private:
 	GLFWwindow* m_window;
-	Rectangle* m_rectangle;
+	Cube* m_cube;
 };

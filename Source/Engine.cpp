@@ -12,7 +12,7 @@
 Engine::Engine()
 {
 	m_window = nullptr;
-	m_rectangle = nullptr;
+	m_cube = nullptr;
 }
 
 Engine::~Engine()
@@ -60,11 +60,13 @@ void Engine::init()
 		glfwSetFramebufferSizeCallback(m_window, Engine::framebuffer_size_callback);
 	}
 
+	// init cube object
 	{
-		m_rectangle = new Rectangle();
-		m_rectangle->setShader(new Shader("Source/Shaders/rectangle.vert", "Source/Shaders/rectangle.frag"));
-		m_rectangle->setTexure(DATA->getTexture("Resource/Texture/container.jpg"));
+		m_cube = new Cube();
+		m_cube->setShader(new Shader("Source/Shaders/cube.vert", "Source/Shaders/cube.frag"));
+		m_cube->setTexture(DATA->loadTexture("Resource/Texture/container.jpg"));
 	}
+
 }
 
 void Engine::run()
@@ -75,7 +77,7 @@ void Engine::run()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		m_rectangle->draw();
+		m_cube->draw();
 
 		WINDOW_MANAGER->render();
 		INPUT_MANAGER->handleEvent();

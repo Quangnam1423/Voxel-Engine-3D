@@ -53,6 +53,8 @@ glDeleteBuffers(1, &m_ebo);
 
 void Rectangle::draw()  
 {  
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
     m_shader->use();  
 	m_shader->setInt("texture1", 0);
     glBindVertexArray(m_vao);  
@@ -65,5 +67,4 @@ void Rectangle::cleanup()
 	glDeleteVertexArrays(1, &m_vao);
 	glDeleteBuffers(1, &m_vbo);
 	glDeleteBuffers(1, &m_ebo);
-
 }
