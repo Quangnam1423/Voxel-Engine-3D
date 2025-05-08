@@ -11,6 +11,8 @@ WindowManager::~WindowManager()
 
 void WindowManager::render()
 {
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	glfwSwapBuffers(m_window);
 }
 

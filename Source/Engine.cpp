@@ -54,6 +54,11 @@ void Engine::init()
 		}
 	}
 
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
 	// set viewport
 	{
 		glViewport(0, 0, 800, 600);
@@ -75,7 +80,7 @@ void Engine::run()
 		INPUT_MANAGER->processInput(m_window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		m_cube->draw();
 

@@ -7,58 +7,61 @@ Cube::Cube()
 {
 	m_shader = nullptr;
 	m_textureID = 0;
-	m_vertices = {
-		// front face
-		// positions          // colors           // texture coords
-		Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.5f , 0.75f), 1} , // bottom left
-		Vertex{glm::vec3(0.5f, -0.5f, -0.5f),glm::vec2(0.75f , 0.75f) , 1},   // bottom right
-		Vertex{glm::vec3(0.5f,  0.5f, -0.5f), glm::vec2(0.75f , 0.99f),1} ,  // top right
-		Vertex{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.5f , 0.99f),1} ,   // top left 
+    m_vertices = {
+        // Front face
+        Vertex{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec2(0.0f, 1.0f), 1 }, // Bottom-left
+        Vertex{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec2(1.0f, 1.0f), 1 }, // Bottom-right
+        Vertex{ glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 0.0f), 1 }, // Top-right
+        Vertex{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec2(0.0f, 0.0f), 1 }, // Top-left
 
-		//behind face
-		// positions          // colors           // texture coords
-		Vertex{glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(0.5f , 0.75f),1} ,  // bottom left
-		Vertex{glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.75f , 0.75f), 1} , // bottom right
-		Vertex{glm::vec3(-0.5f,  0.5f, 0.5f), glm::vec2(0.75f , 0.99f), 1} , // top right
-		Vertex{glm::vec3(0.5f,  0.5f, 0.5f), glm::vec2(0.5f , 0.99f), 1}  , // top left 
+        // Back face
+        Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), 1 }, // Bottom-left
+        Vertex{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), 1 }, // Bottom-right
+        Vertex{ glm::vec3(0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 0.0f), 1 }, // Top-right
+        Vertex{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(1.0f, 0.0f), 1 }, // Top-left
 
-		//right face
-		// positions          // colors           // texture coords
-		Vertex{glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.5f , 0.75f),1} ,   // bottom left
-		Vertex{glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(0.75f , 0.75f),1 } ,   // bottom right
-		Vertex{glm::vec3(0.5f,  0.5f, 0.5f), glm::vec2(0.75f , 0.99f), 1},   // top right
-		Vertex{glm::vec3(0.5f,  0.5f, -0.5f), glm::vec2(0.5f , 0.99f),1} ,    // top left 
+        // Left face
+        Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), 1 }, // Bottom-left
+        Vertex{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec2(1.0f, 1.0f), 1 }, // Bottom-right
+        Vertex{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 0.0f), 1 }, // Top-right
+        Vertex{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 0.0f), 1 }, // Top-left
 
-		//left face
-		// positions          // colors           // texture coords
-		Vertex{ glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.5f , 0.75f),1} ,   // bottom left
-		Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.75f , 0.75f), 1} ,   // bottom right
-		Vertex{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.75f , 0.99f), 1} ,   // top right
-		Vertex{glm::vec3(-0.5f,  0.5f, 0.5f), glm::vec2(0.5f , 0.99f),1},    // top left 
+        // Right face
+        Vertex{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec2(0.0f, 1.0f), 1 }, // Bottom-left
+        Vertex{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), 1 }, // Bottom-right
+        Vertex{ glm::vec3(0.5f,  0.5f, -0.5f), glm::vec2(1.0f, 0.0f), 1 }, // Top-right
+        Vertex{ glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(0.0f, 0.0f), 1 }, // Top-left
 
-		//top face
-		// positions          // colors           // texture coords
-		Vertex{glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.75f , 0.5f), 1},   // bottom left
-		Vertex{glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.0f, 0.5f),1},   // bottom right
-		Vertex{glm::vec3(0.5f , 0.5f ,0.5f) , glm::vec2(1.0f , 0.75f) , 1},   // top right
-		Vertex{glm::vec3(-0.5f,  0.5f, 0.5f), glm::vec2(0.75f , 0.75f),1} ,    // top left 
+        // Top face
+        Vertex{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec2(0.0f, 1.0f), 1 }, // Bottom-left
+        Vertex{ glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 1.0f), 1 }, // Bottom-right
+        Vertex{ glm::vec3(0.5f,  0.5f, -0.5f), glm::vec2(1.0f, 0.0f), 1 }, // Top-right
+        Vertex{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 0.0f), 1 }, // Top-left
 
-		//bottom face
-		// positions          // colors           // texture coords
-		Vertex{ glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.25f , 0.75f),1} ,   // bottom left
-		Vertex{glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(0.5f , 0.75f),1} ,   // bottom right
-		Vertex{glm::vec3(0.5f,  -0.5f, -0.5f), glm::vec2(0.5f , 1.0f), 1} ,   // top right
-		Vertex{glm::vec3(-0.5f,  -0.5f, -0.5f), glm::vec2(0.25f , 1.0f),1} ,    // top left 
-	};
+        // Bottom face
+        Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 0.0f), 1 }, // Bottom-left
+        Vertex{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 0.0f), 1 }, // Bottom-right
+        Vertex{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec2(1.0f, 1.0f), 1 }, // Top-right
+        Vertex{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec2(0.0f, 1.0f), 1 }  // Top-left
+    };
 
-	m_indices = {
-		0 , 1 , 2 ,			2 , 3 , 0 , // front face
-		4 , 5 , 6 ,			6 , 7 , 4 , // behind face
-		8 , 9 , 10,			10 , 11 , 8 , // right face
-		12, 13, 14,			14 , 15 , 12 , // left face
-		16, 17, 18,			18 , 19 , 16 , // top face
-		20, 21, 22,			22 , 23 , 20 // bottom face
-	};
+
+
+    m_indices = {
+        // Front face
+        0, 1, 2, 2, 3, 0,
+        // Back face
+        4, 5, 6, 6, 7, 4,
+        // Left face
+        8, 9, 10, 10, 11, 8,
+        // Right face
+        12, 13, 14, 14, 15, 12,
+        // Top face
+        16, 17, 18, 18, 19, 16,
+        // Bottom face
+        20, 21, 22, 22, 23, 20
+    };
+
 
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
@@ -70,7 +73,7 @@ Cube::Cube()
 	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), m_indices.data(), GL_STATIC_DRAW);
 
 	// position attribute
 	glEnableVertexAttribArray(0);
@@ -110,7 +113,7 @@ void Cube::draw()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 	glBindVertexArray(m_vao);
-	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
