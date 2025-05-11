@@ -3,15 +3,17 @@
 #include "EngineManager/WindowManager.h"
 #include "EngineManager/InputManager.h"
 #include "EngineManager/ResourceManager.h"
+#include "EngineManager/CameraManager.h"
 #include "Objects/Triangle.h"	
 #include "Objects/Shader.h"
 #include "Objects/Cube.h"
 #include "Objects/Rectangle.h"
+#include "Objects/Camera.h"
 #include <iostream>
 
 Engine::Engine()
 {
-	m_window = nullptr;
+	m_elapseTime = 0.0f;
 	m_cube = nullptr;
 }
 
@@ -36,14 +38,13 @@ void Engine::init()
 
 	// init window
 	{
-		m_window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, WINDOW_TITLE, NULL, NULL);
-		if (!m_window) {
+		GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, WINDOW_TITLE, NULL, NULL);
+		if (!window) {
 			std::cerr << "Failed to create GLFW window" << std::endl;
 			glfwTerminate();
 			return;
 		}
-		glfwMakeContextCurrent(m_window);
-		WINDOW_MANAGER->setWindow(m_window);
+		WINDOW_MANAGER->setWindow(window);
 	}
 
 	// load glad
@@ -55,14 +56,16 @@ void Engine::init()
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
 
-	// set viewport
 	{
-		glViewport(0, 0, 800, 600);
-		glfwSetFramebufferSizeCallback(m_window, Engine::framebuffer_size_callback);
+		Camera* camera = new Camera();
+		camera->setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+		camera->setWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
+		camera->setTarget({ 0.0f, 0.0f, 0.0f });
+		CM->setCamera(camera);
 	}
 
 	// init cube object
@@ -72,17 +75,26 @@ void Engine::init()
 		m_cube->setTexture(DATA->loadTexture("Resource/Texture/container.jpg"));
 	}
 
+	// callback
+	{
+		glfwSetCursorPosCallback(WINDOW_MANAGER->getWindow(), InputManager::mouseCallback);
+	}
 }
 
 void Engine::run()
 {
-	while (!glfwWindowShouldClose(m_window)) {
-		INPUT_MANAGER->processInput(m_window);
+	while (!glfwWindowShouldClose(WINDOW_MANAGER->getWindow())) {
+		float deltaTime = static_cast<float>(glfwGetTime()) - m_elapseTime;
+		float m_elapseTime = static_cast<float>(glfwGetTime());
+		INPUT_MANAGER->processInput(deltaTime);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_cube->draw();
+		glm::mat4 view = CM->getCamera()->getViewMatrix();
+		float aspect = (float)WINDOW_MANAGER->getWindowSize().width / (float)WINDOW_MANAGER->getWindowSize().height;
+		glm::mat4 projection = glm::perspective(glm::radians(CM->getCamera()->getZoom()), aspect, 0.1f, 500.f);
+		m_cube->draw(view, projection);
 
 		WINDOW_MANAGER->render();
 		INPUT_MANAGER->handleEvent();

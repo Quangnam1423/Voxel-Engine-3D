@@ -18,10 +18,11 @@ private:
 	unsigned int m_vao, m_vbo, m_ebo;
 	GLuint m_textureID;
 	Shader* m_shader;
+
 public:
 	Cube();
 	~Cube();
-	void draw();
+	void draw(glm::mat4 view, glm::mat4 projection);
 	void cleanup();
 	void setShader(Shader* shader) { m_shader = shader; }
 	void setTexture(GLuint textureID) { m_textureID = textureID; }

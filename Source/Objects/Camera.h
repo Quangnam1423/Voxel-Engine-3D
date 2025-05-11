@@ -1,34 +1,26 @@
 #pragma once
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include "../movement.h"
 #include "../Singleton.h"
-
-enum class Direction
-{
-	FORWARD,
-	BACKWARD,
-	LEFT,
-	RIGHT
-};
 
 #define YAW -90.0f
 #define PITCH 0.0f
-#define SPEED 2.5f
-#define SENSITIVITY 0.1f
+#define SPEED 0.005f
+#define SENSITIVITY 100.0f
 #define ZOOM 45.0f
 
-class Camera : public Singleton<Camera>
+class Camera
 {
-	friend class Singleton<Camera>;	
 public:
 	Camera();
 	~Camera();
 
 	glm::mat4 getViewMatrix();
 	void processKeyboard(Direction direction, float deltaTime);
-	void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+	void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch);
 	void processMouseScroll(float yoffset);
 	float getZoom();
 

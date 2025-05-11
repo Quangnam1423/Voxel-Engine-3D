@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\EngineManager\CameraManager.cpp" />
     <ClCompile Include="Source\Objects\Rectangle.cpp" />
     <ClCompile Include="Source\EngineManager\ResourceManager.cpp" />
     <ClCompile Include="Source\fastnoiselifeImpl.cpp" />
@@ -167,6 +168,8 @@
     <ClCompile Include="Source\Objects\Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\EngineManager\CameraManager.h" />
+    <ClInclude Include="Source\movement.h" />
     <ClInclude Include="Source\Objects\Rectangle.h" />
     <ClInclude Include="Source\Objects\Offset.h" />
     <ClInclude Include="Source\EngineManager\ResourceManager.h" />

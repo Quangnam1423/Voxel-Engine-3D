@@ -27,6 +27,6 @@ public:
 		glViewport(0, 0, width, height);
 	}
 private:
-	GLFWwindow* m_window;
 	Cube* m_cube;
+	float m_elapseTime;
 };

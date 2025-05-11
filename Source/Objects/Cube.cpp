@@ -1,5 +1,10 @@
 #include "Cube.h"
 #include "Shader.h"
+#include "../EngineManager/WindowManager.h"
+#include "../EngineManager/CameraManager.h"
+#include "Camera.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -95,17 +100,12 @@ Cube::~Cube()
 	cleanup();
 }
 
-void Cube::draw()
+void Cube::draw(glm::mat4 view, glm::mat4 projection)
 {
 	m_shader->use();
-
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)800.0 / (float)600, 0.1f, 100.0f);
-	m_shader->setMat4("model", model);
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+    m_shader->setMat4("model", model);
 	m_shader->setMat4("view", view);
 	m_shader->setMat4("projection", projection);
 

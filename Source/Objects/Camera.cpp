@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <iostream>
 
 Camera::Camera()
 {
@@ -22,16 +23,48 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix()
 {
+	updateCameraVectors();
 	return glm::lookAt(m_position, m_target, m_up);
 }
 
 void Camera::processKeyboard(Direction direction, float deltaTime)
 {
-
+	float velocity = m_movementSpeed * deltaTime;
+	if (direction == Forward) {
+		m_position += m_direction * velocity;
+	}
+	else if (direction == Backward) {
+		m_position -= m_direction * velocity;
+	}
+	else if (direction == Left) {
+		m_position -= m_right * velocity;
+	}
+	else if (direction == Right) {
+		m_position += m_right * velocity;
+	}
+	else if (direction == Up) {
+		m_position += m_up * velocity;
+	}
+	else if (direction == Down) {
+		m_position -= m_up * velocity;
+	}
 }
 
-void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
+void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
 {
+	xoffset *= m_mouseSensitivity;
+	yoffset *= m_mouseSensitivity;
+
+	m_yaw -= xoffset;
+	m_pitch -= yoffset;
+	if (m_pitch < -89.0f) {
+		m_pitch = -89.f;
+	}
+	if (m_pitch > 89.f)
+	{
+		m_pitch = 89.0f;
+	}
+	updateCameraVectors();
 }
 
 void Camera::processMouseScroll(float yoffset)
