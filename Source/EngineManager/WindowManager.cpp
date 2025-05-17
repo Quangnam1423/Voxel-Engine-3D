@@ -27,7 +27,13 @@ void WindowManager::render()
 
 WindowSize WindowManager::getWindowSize()
 {
-	return m_windowSize;
+	if (m_isFullScreen) {
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+		return { mode->width, mode->height };
+	} 
+	else 
+		return m_windowSize;
 }
 
 void WindowManager::setWindow(GLFWwindow* window)

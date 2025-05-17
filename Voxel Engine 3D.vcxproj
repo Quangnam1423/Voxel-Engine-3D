@@ -166,6 +166,7 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
     <ClCompile Include="Source\Objects\Triangle.cpp" />
+    <ClCompile Include="Source\Objects\Voxel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EngineManager\CameraManager.h" />
@@ -179,10 +180,12 @@
     <ClInclude Include="Source\EngineManager\InputManager.h" />
     <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\Objects\Vertex.h" />
+    <ClInclude Include="Source\Objects\VoxelFace.h" />
     <ClInclude Include="Source\Singleton.h" />
     <ClInclude Include="Source\WindowConfig.h" />
     <ClInclude Include="Source\EngineManager\WindowManager.h" />
     <ClInclude Include="Source\Objects\Triangle.h" />
+    <ClInclude Include="Source\Objects\Voxel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\cube.frag" />
