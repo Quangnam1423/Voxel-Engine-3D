@@ -7,6 +7,8 @@
 #include "Objects/Triangle.h"	
 #include "Objects/Shader.h"
 #include "Objects/Cube.h"
+#include "Objects/ColorCube.h"
+#include "Objects/LightCube.h"
 #include "Objects/Rectangle.h"
 #include "Objects/Camera.h"
 #include <iostream>
@@ -14,7 +16,8 @@
 Engine::Engine()
 {
 	m_elapseTime = 0.0f;
-	m_cube = nullptr;
+	m_lightCube = nullptr;
+	m_colorCube = nullptr;
 }
 
 Engine::~Engine()
@@ -68,11 +71,16 @@ void Engine::init()
 		CM->setCamera(camera);
 	}
 
-	// init cube object
+	// init color Cube
 	{
-		m_cube = new Cube();
-		m_cube->setShader(new Shader("Source/Shaders/cube.vert", "Source/Shaders/cube.frag"));
-		m_cube->setTexture(DATA->loadTexture("Resource/Texture/container.jpg"));
+		m_colorCube = new ColorCube();
+		m_colorCube->setShader(new Shader("Resource/Shaders/colorCube.vert", "Resource/Shaders/colorCube.frag"));
+	}
+
+	//init light source cube
+	{
+		m_lightCube = new LightCube();
+		m_lightCube->setShader(new Shader("Resource/Shaders/lightCube.vert", "Resource/Shaders/lightCube.frag"));
 	}
 
 	// callback
@@ -88,13 +96,15 @@ void Engine::run()
 		float m_elapseTime = static_cast<float>(glfwGetTime());
 		INPUT_MANAGER->processInput(deltaTime);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 view = CM->getCamera()->getViewMatrix();
+		glm::vec3 cameraPosition = CM->getCamera()->getPosition();
 		float aspect = (float)WINDOW_MANAGER->getWindowSize().width / (float)WINDOW_MANAGER->getWindowSize().height;
 		glm::mat4 projection = glm::perspective(glm::radians(CM->getCamera()->getZoom()), aspect, 0.1f, 500.f);
-		m_cube->draw(view, projection);
+		m_colorCube->draw(view, projection, cameraPosition, {0.0f, 0.0f, 0.0f});
+		m_lightCube->draw(view, projection);
 
 		WINDOW_MANAGER->render();
 		INPUT_MANAGER->handleEvent();

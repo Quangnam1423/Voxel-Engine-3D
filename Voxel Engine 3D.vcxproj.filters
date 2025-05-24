@@ -60,6 +60,12 @@
     <ClCompile Include="Source\Objects\Voxel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Objects\ColorCube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\LightCube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Singleton.h">
@@ -113,13 +119,23 @@
     <ClInclude Include="Source\Objects\VoxelFace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Objects\ColorCube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\LightCube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Shaders\triangle.vert" />
-    <None Include="Source\Shaders\triangle.frag" />
-    <None Include="Source\Shaders\cube.frag" />
-    <None Include="Source\Shaders\cube.vert" />
-    <None Include="Source\Shaders\rectangle.vert" />
-    <None Include="Source\Shaders\rectangle.frag" />
+    <None Include="Resource\Shaders\triangle.vert" />
+    <None Include="Resource\Shaders\triangle.frag" />
+    <None Include="Resource\Shaders\cube.frag" />
+    <None Include="Resource\Shaders\cube.vert" />
+    <None Include="Resource\Shaders\rectangle.vert" />
+    <None Include="Resource\Shaders\rectangle.frag" />
+    <None Include="Resource\Shaders\colorCube.vert" />
+    <None Include="Resource\Shaders\colorCube.frag" />
+    <None Include="Resource\Shaders\lightCube.vert" />
+    <None Include="Resource\Shaders\lightCube.frag" />
   </ItemGroup>
 </Project>

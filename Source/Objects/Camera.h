@@ -8,7 +8,7 @@
 
 #define YAW -90.0f
 #define PITCH 0.0f
-#define SPEED 0.005f
+#define SPEED 0.001f
 #define SENSITIVITY 100.0f
 #define ZOOM 45.0f
 
@@ -51,3 +51,4 @@ private:
 	void updateCameraVectors();
 };
 
+ 

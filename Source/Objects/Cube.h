@@ -15,7 +15,7 @@ class Cube
 private:
 	std::vector<Vertex> m_vertices;
 	std::vector<GLuint> m_indices;
-	unsigned int m_vao, m_vbo, m_ebo;
+	GLuint m_vao, m_vbo, m_ebo;
 	GLuint m_textureID;
 	Shader* m_shader;
 

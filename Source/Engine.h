@@ -11,7 +11,8 @@
 
 class Triangle;
 class Rectangle;
-class Cube;
+class LightCube;
+class ColorCube;
 
 class Engine : public Singleton<Engine>
 {
@@ -27,6 +28,7 @@ public:
 		glViewport(0, 0, width, height);
 	}
 private:
-	Cube* m_cube;
+	LightCube* m_lightCube;
+	ColorCube* m_colorCube;
 	float m_elapseTime;
 };

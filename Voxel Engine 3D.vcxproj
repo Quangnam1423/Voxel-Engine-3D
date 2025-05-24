@@ -150,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Objects\LightCube.cpp" />
+    <ClCompile Include="Source\Objects\ColorCube.cpp" />
     <ClCompile Include="Source\EngineManager\CameraManager.cpp" />
     <ClCompile Include="Source\Objects\Rectangle.cpp" />
     <ClCompile Include="Source\EngineManager\ResourceManager.cpp" />
@@ -169,6 +171,8 @@
     <ClCompile Include="Source\Objects\Voxel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Objects\LightCube.h" />
+    <ClInclude Include="Source\Objects\ColorCube.h" />
     <ClInclude Include="Source\EngineManager\CameraManager.h" />
     <ClInclude Include="Source\movement.h" />
     <ClInclude Include="Source\Objects\Rectangle.h" />
@@ -188,12 +192,16 @@
     <ClInclude Include="Source\Objects\Voxel.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Shaders\cube.frag" />
-    <None Include="Source\Shaders\cube.vert" />
-    <None Include="Source\Shaders\rectangle.frag" />
-    <None Include="Source\Shaders\rectangle.vert" />
-    <None Include="Source\Shaders\triangle.frag" />
-    <None Include="Source\Shaders\triangle.vert" />
+    <None Include="Resource\Shaders\colorCube.frag" />
+    <None Include="Resource\Shaders\colorCube.vert" />
+    <None Include="Resource\Shaders\cube.frag" />
+    <None Include="Resource\Shaders\cube.vert" />
+    <None Include="Resource\Shaders\lightCube.frag" />
+    <None Include="Resource\Shaders\lightCube.vert" />
+    <None Include="Resource\Shaders\rectangle.frag" />
+    <None Include="Resource\Shaders\rectangle.vert" />
+    <None Include="Resource\Shaders\triangle.frag" />
+    <None Include="Resource\Shaders\triangle.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

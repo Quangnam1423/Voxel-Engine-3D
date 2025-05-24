@@ -124,4 +124,6 @@ void Cube::cleanup()
 	glDeleteBuffers(1, &m_ebo);
 	glDeleteTextures(1, &m_textureID);
 	glDeleteProgram(m_shader->getId());
+    m_vertices.clear();
+    m_indices.clear();
 }
