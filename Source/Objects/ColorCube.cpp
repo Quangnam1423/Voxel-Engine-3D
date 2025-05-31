@@ -97,19 +97,31 @@ ColorCube::~ColorCube()
 void ColorCube::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 cameraPosition, glm::vec3 lightPosition)
 {
     m_shader->use();
-    m_shader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-    m_shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-    m_shader->setVec3("lightPos", lightPosition);
-    m_shader->setVec3("viewPos", cameraPosition);
+	m_shader->setVec3("light.position", lightPosition);
+	m_shader->setVec3("viewPos", cameraPosition);
+
+    glm::vec3 lightColor;
+    lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0));
+    lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7));
+    lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3));
+    glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+    m_shader->setVec3("light.ambient", ambientColor);
+    m_shader->setVec3("light.diffuse", diffuseColor);
+    m_shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+    // material properties
+    m_shader->setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+    m_shader->setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+    m_shader->setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
+    m_shader->setFloat("material.shininess", 32.0f);
 
     glm::mat4 model(1.0f);
-	model = glm::translate(model, glm::vec3(2.0f, -2.0f, 5.0f));
-	m_shader->setMat4("model", model);
-	m_shader->setMat4("view", view);
-	m_shader->setMat4("projection", projection);
+    model = glm::translate(model, glm::vec3(2.0f, -2.0f, 5.0f));
+    m_shader->setMat4("model", model);
+    m_shader->setMat4("view", view);
+    m_shader->setMat4("projection", projection);
 
-    //set color for fragment shader
-	m_shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);

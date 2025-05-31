@@ -118,11 +118,12 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;kernel32.lib;glfw3.lib;glu32.lib;Gdi32.lib;Shell32.lib;glfw3dll.lib;User32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;kernel32.lib;glfw3.lib;glu32.lib;Gdi32.lib;Shell32.lib;glfw3dll.lib;User32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;sfml-audio-d.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -144,12 +145,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;kernel32.lib;glfw3.lib;glu32.lib;Gdi32.lib;Shell32.lib;glfw3dll.lib;User32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-network.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;kernel32.lib;glfw3.lib;glu32.lib;Gdi32.lib;Shell32.lib;glfw3dll.lib;User32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-network.lib;sfml-audio.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Ingredient\Model.cpp" />
+    <ClCompile Include="Source\Ingredient\Mesh.cpp" />
     <ClCompile Include="Source\Objects\LightCube.cpp" />
     <ClCompile Include="Source\Objects\ColorCube.cpp" />
     <ClCompile Include="Source\EngineManager\CameraManager.cpp" />
@@ -169,8 +172,14 @@
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
     <ClCompile Include="Source\Objects\Triangle.cpp" />
     <ClCompile Include="Source\Objects\Voxel.cpp" />
+    <ClCompile Include="Source\Objects\WoodBox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Ingredient\Model.h" />
+    <ClInclude Include="Source\Ingredient\Mesh.h" />
+    <ClInclude Include="Source\Ingredient\Material.h" />
+    <ClInclude Include="Source\Ingredient\ModelVertex.h" />
+    <ClInclude Include="Source\Ingredient\Texture.h" />
     <ClInclude Include="Source\Objects\LightCube.h" />
     <ClInclude Include="Source\Objects\ColorCube.h" />
     <ClInclude Include="Source\EngineManager\CameraManager.h" />
@@ -190,6 +199,7 @@
     <ClInclude Include="Source\EngineManager\WindowManager.h" />
     <ClInclude Include="Source\Objects\Triangle.h" />
     <ClInclude Include="Source\Objects\Voxel.h" />
+    <ClInclude Include="Source\Objects\WoodBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\Shaders\colorCube.frag" />
@@ -198,10 +208,14 @@
     <None Include="Resource\Shaders\cube.vert" />
     <None Include="Resource\Shaders\lightCube.frag" />
     <None Include="Resource\Shaders\lightCube.vert" />
+    <None Include="Resource\Shaders\model.frag" />
+    <None Include="Resource\Shaders\model.vert" />
     <None Include="Resource\Shaders\rectangle.frag" />
     <None Include="Resource\Shaders\rectangle.vert" />
     <None Include="Resource\Shaders\triangle.frag" />
     <None Include="Resource\Shaders\triangle.vert" />
+    <None Include="Resource\Shaders\WoodBox.frag" />
+    <None Include="Resource\Shaders\WoodBox.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

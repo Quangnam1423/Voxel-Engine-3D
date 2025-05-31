@@ -66,6 +66,15 @@
     <ClCompile Include="Source\Objects\LightCube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Objects\WoodBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ingredient\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ingredient\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Singleton.h">
@@ -125,6 +134,24 @@
     <ClInclude Include="Source\Objects\LightCube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Ingredient\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\WoodBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ingredient\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ingredient\ModelVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ingredient\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ingredient\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\Shaders\triangle.vert" />
@@ -137,5 +164,9 @@
     <None Include="Resource\Shaders\colorCube.frag" />
     <None Include="Resource\Shaders\lightCube.vert" />
     <None Include="Resource\Shaders\lightCube.frag" />
+    <None Include="Resource\Shaders\WoodBox.vert" />
+    <None Include="Resource\Shaders\WoodBox.frag" />
+    <None Include="Resource\Shaders\model.vert" />
+    <None Include="Resource\Shaders\model.frag" />
   </ItemGroup>
 </Project>
