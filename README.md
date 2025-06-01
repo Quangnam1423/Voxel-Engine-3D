@@ -10,6 +10,9 @@ copy các file .dll trong đường dẫn ./Dependencies/bin/ ra ngoài đườn
 
 Khởi chạy dự án với Visual Studio( khuyến khích visual studio 2022) bằng file Voxel Engine 3D.sln hoặc terminal "./Voxel Engine 3D.sln"
 
+Note: đảm bảo visual studio đã có module dành cho phát triển ứng dụng desktop C++ như bên dưới:
+![](visualinstaller.png)
+
 Nhấn Build và xem kết quả.
 
 
