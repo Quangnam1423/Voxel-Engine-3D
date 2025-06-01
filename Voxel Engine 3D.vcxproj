@@ -173,6 +173,7 @@
     <ClCompile Include="Source\Objects\Triangle.cpp" />
     <ClCompile Include="Source\Objects\Voxel.cpp" />
     <ClCompile Include="Source\Objects\WoodBox.cpp" />
+    <ClCompile Include="Source\Objects\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Ingredient\Model.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Source\Objects\Triangle.h" />
     <ClInclude Include="Source\Objects\Voxel.h" />
     <ClInclude Include="Source\Objects\WoodBox.h" />
+    <ClInclude Include="Source\Objects\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\Shaders\colorCube.frag" />
