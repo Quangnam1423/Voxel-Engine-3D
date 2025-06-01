@@ -12,3 +12,9 @@ Khởi chạy dự án với Visual Studio( khuyến khích visual studio 2022) 
 
 Nhấn Build và xem kết quả.
 """
+
+Test chức năng:
+
+"""
+![Có thể thay thế các mô hình 3D miễn phí khác để kiểm tra hiệu suất của core engine tại đây](https://sketchfab.com/feed)
+"""
