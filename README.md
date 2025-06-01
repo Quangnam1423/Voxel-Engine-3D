@@ -4,19 +4,20 @@
 
 ## Hướng dẫn chạy:
 
-copy các file .dll trong đường dẫn ./Dependencies/bin/ ra ngoài đường dẫn root của thư mục như ví dụ trên
+'''
+Khởi chạy dự án với Visual Studio( khuyến khích visual studio 2022) bằng file Voxel Engine 3D.sln hoặc 
+terminal 
+> ./Voxel Engine 3D.sln
 
-![](Resource/Pictures/demo.png)
-
-Khởi chạy dự án với Visual Studio( khuyến khích visual studio 2022) bằng file Voxel Engine 3D.sln hoặc terminal "./Voxel Engine 3D.sln"
-
-Note: đảm bảo visual studio đã có module dành cho phát triển ứng dụng desktop C++ như bên dưới:
+> Note: đảm bảo visual studio đã có module dành cho phát triển ứng dụng desktop C++ như bên dưới:
 ![](Resource/Pictures/visualinstaller.png)
 
 Nhấn Build và xem kết quả.
+'''
 
 ### Hướng dẫn tương tác với camera
 
+'''
 F11 - Full màn hình
 W - camera di chuyển tiến lên theo direction tại thời điểm nhấn.
 A - camera dịch sang phải
@@ -24,7 +25,7 @@ S - camera lùi xuống theo direction tại thời điểm nhấn.
 D - camera dịch sang phải.
 
 Thao tác với chuột, chuột chạm viền màn hình để di chuyển direction của camera, hướng lên, hướng xuống, nhìn sang trái và nhìn sang phải.
-
+'''
 
 Test chức năng:
 
