@@ -1,6 +1,5 @@
 x64/
 Voxel Engine 3D/x64/
-*.obj
 *.exe
 *.pdb
 *.ilk
@@ -14,10 +13,3 @@ Voxel Engine 3D/x64/
 *.sdf
 *.opendb
 *.VC.db
-
-*.ipch
-*.iobj
-*.ipdb
-*.ncb
-*.user
-*.suo
