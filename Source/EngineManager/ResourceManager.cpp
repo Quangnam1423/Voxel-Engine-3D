@@ -25,7 +25,7 @@ ResourceManager::~ResourceManager()
 	}
 	m_textures.clear();
     for (auto& model : m_models) {
-
+		delete model.second;
     }
 }
 
@@ -108,6 +108,45 @@ Model* ResourceManager::getModel(std::string modelPath)
             return nullptr;
         }
 	}
+}
+
+GLuint ResourceManager::loadCubemapTexture(const std::vector<std::string>& faces, const std::string& cubemapName) {
+    if (m_cubemaps.count(cubemapName)) {
+        return m_cubemaps[cubemapName];
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(false);
+    for (unsigned int i = 0; i < faces.size(); i++) {
+        unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+        if (data) {
+            GLenum format = GL_RGB;
+            if (nrChannels == 1) format = GL_RED;
+            else if (nrChannels == 4) format = GL_RGBA;
+
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            stbi_image_free(data);
+        }
+        else {
+            std::cerr << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+            stbi_image_free(data);
+            glDeleteTextures(1, &textureID); 
+            return 0; 
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    m_cubemaps[cubemapName] = textureID;
+    return textureID;
 }
 
 bool ResourceManager::loadModel(std::string modelPath)

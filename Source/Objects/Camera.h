@@ -28,6 +28,8 @@ public:
 	glm::vec3 getPosition();
 	void setPosition(glm::vec3 position);
 
+	glm::vec3 getDirection() { return m_direction; };
+
 	glm::vec3 getTarget();
 	void setTarget(glm::vec3 target);
 

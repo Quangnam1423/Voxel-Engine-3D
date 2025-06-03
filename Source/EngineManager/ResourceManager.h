@@ -46,6 +46,8 @@ public:
 	bool loadTexture(std::string texturePath);
 	bool loadModel(std::string modelPath);
 	Model* getModel(std::string modelPath);
+
+	GLuint loadCubemapTexture(const std::vector<std::string>& faces, const std::string& cubemapName);
 private:
 	void processNode(aiNode* node, const aiScene* scene, Model* model);
 	Mesh* processMesh(aiMesh* mesh, const aiScene* scene, Model* model);
@@ -54,6 +56,7 @@ private:
 private:
 	std::map<std::string, GLuint> m_textures;
 	std::unordered_map<std::string, Model*> m_models;
+	std::map<std::string, GLuint> m_cubemaps;
 };
 
 

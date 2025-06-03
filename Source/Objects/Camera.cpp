@@ -11,7 +11,7 @@ Camera::Camera()
 	m_worldUp = glm::vec3(0.0f, 0.0f, 0.0f);
 	m_yaw = YAW;
 	m_pitch = PITCH;
-	m_movementSpeed = SPEED;
+	m_movementSpeed = SPEED * 10000;
 	m_mouseSensitivity = SENSITIVITY;
 	m_zoom = ZOOM;
 	updateCameraVectors();
@@ -48,6 +48,7 @@ void Camera::processKeyboard(Direction direction, float deltaTime)
 	else if (direction == Down) {
 		m_position -= m_up * velocity;
 	}
+	updateCameraVectors();
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
@@ -113,6 +114,8 @@ void Camera::setWorldUp(glm::vec3 worldUp)
 	m_worldUp = worldUp;
 	updateCameraVectors();	
 }
+
+
 
 void Camera::updateCameraVectors()
 {

@@ -151,6 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Objects\ChunkManager.cpp" />
+    <ClCompile Include="Source\Objects\ChunkMesh.cpp" />
+    <ClCompile Include="Source\Objects\Chunk.cpp" />
+    <ClCompile Include="Source\Objects\Skybox.cpp" />
+    <ClCompile Include="Source\Objects\Floor.cpp" />
     <ClCompile Include="Source\Ingredient\Model.cpp" />
     <ClCompile Include="Source\Ingredient\Mesh.cpp" />
     <ClCompile Include="Source\Objects\LightCube.cpp" />
@@ -171,11 +176,16 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\EngineManager\WindowManager.cpp" />
     <ClCompile Include="Source\Objects\Triangle.cpp" />
-    <ClCompile Include="Source\Objects\Voxel.cpp" />
     <ClCompile Include="Source\Objects\WoodBox.cpp" />
     <ClCompile Include="Source\Objects\World.cpp" />
+    <ClCompile Include="Source\Objects\Voxel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Objects\ChunkManager.h" />
+    <ClInclude Include="Source\Objects\ChunkMesh.h" />
+    <ClInclude Include="Source\Objects\Chunk.h" />
+    <ClInclude Include="Source\Objects\Skybox.h" />
+    <ClInclude Include="Source\Objects\Floor.h" />
     <ClInclude Include="Source\Ingredient\Model.h" />
     <ClInclude Include="Source\Ingredient\Mesh.h" />
     <ClInclude Include="Source\Ingredient\Material.h" />
@@ -186,7 +196,6 @@
     <ClInclude Include="Source\EngineManager\CameraManager.h" />
     <ClInclude Include="Source\movement.h" />
     <ClInclude Include="Source\Objects\Rectangle.h" />
-    <ClInclude Include="Source\Objects\Offset.h" />
     <ClInclude Include="Source\EngineManager\ResourceManager.h" />
     <ClInclude Include="Source\Objects\Cube.h" />
     <ClInclude Include="Source\Objects\Shader.h" />
@@ -199,11 +208,13 @@
     <ClInclude Include="Source\WindowConfig.h" />
     <ClInclude Include="Source\EngineManager\WindowManager.h" />
     <ClInclude Include="Source\Objects\Triangle.h" />
-    <ClInclude Include="Source\Objects\Voxel.h" />
     <ClInclude Include="Source\Objects\WoodBox.h" />
     <ClInclude Include="Source\Objects\World.h" />
+    <ClInclude Include="Source\Objects\Voxel.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resource\Shaders\chunk.frag" />
+    <None Include="Resource\Shaders\chunk.vert" />
     <None Include="Resource\Shaders\colorCube.frag" />
     <None Include="Resource\Shaders\colorCube.vert" />
     <None Include="Resource\Shaders\cube.frag" />
@@ -214,6 +225,8 @@
     <None Include="Resource\Shaders\model.vert" />
     <None Include="Resource\Shaders\rectangle.frag" />
     <None Include="Resource\Shaders\rectangle.vert" />
+    <None Include="Resource\Shaders\skybox.frag" />
+    <None Include="Resource\Shaders\skybox.vert" />
     <None Include="Resource\Shaders\triangle.frag" />
     <None Include="Resource\Shaders\triangle.vert" />
     <None Include="Resource\Shaders\WoodBox.frag" />

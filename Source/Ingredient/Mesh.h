@@ -30,6 +30,7 @@ private:
 
 private:
 	
+	unsigned int m_numIndices;
 	unsigned int m_vao, m_vbo, m_ebo;
 
 };

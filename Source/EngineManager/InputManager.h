@@ -27,6 +27,27 @@ public:
 	static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 		WINDOW_MANAGER->onFramebufferResized(width, height);
 	};
+	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+		if (key == GLFW_KEY_F && action == GLFW_PRESS) {
+			GLint pylygonMode[2];
+			glGetIntegerv(GL_POLYGON_MODE, pylygonMode);
+			if (pylygonMode[0] == GL_LINE) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
+			else {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			}
+		}
+		else if (key == GLFW_KEY_G && action == GLFW_PRESS) {
+			if (glIsEnabled(GL_CULL_FACE)) {
+				glDisable(GL_CULL_FACE);
+			}
+			else {
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_BACK);
+			}
+		}
+	};
 
 	static void mouseCallback(GLFWwindow* window, double xPos, double yPos) {
 		float xpos = static_cast<float> (xPos);

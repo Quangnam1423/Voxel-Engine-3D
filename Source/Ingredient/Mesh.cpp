@@ -7,7 +7,6 @@ Mesh::Mesh(std::vector<ModelVertex> vertices, std::vector<GLuint> indices, std::
 	m_vertices = vertices;
 	m_indices = indices;
 	m_textures = textures;
-	std::cout << "Mesh created with " << m_vertices.size() << " vertices and " << m_indices.size() << " indices." << std::endl;
 	setupMesh();
 }
 
@@ -17,6 +16,7 @@ Mesh::~Mesh()
 }
 
 void Mesh::draw(Shader& shader) {
+	shader.use();
 	// bind appropriate textures
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -36,7 +36,6 @@ void Mesh::draw(Shader& shader) {
 			number = std::to_string(normalNr++); // transfer unsigned int to string
 		else if (name == "texture_height")
 			number = std::to_string(heightNr++); // transfer unsigned int to string
-
 		shader.setInt((name + number).c_str(), i);
 		// and finally bind the texture
 		glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
@@ -44,7 +43,7 @@ void Mesh::draw(Shader& shader) {
 
 	// draw mesh
 	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_indices.size()), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	// always good practice to set everything back to defaults once configured.
@@ -109,6 +108,14 @@ void Mesh::setupMesh()
 	// weights
 	glEnableVertexAttribArray(6);
 	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), (void*)offsetof(ModelVertex, weights));
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	m_numIndices = static_cast<unsigned int>(m_indices.size());
+
+	m_vertices.clear(); // we don't need the vertices anymore, they are now in the GPU memory
+	m_vertices.shrink_to_fit();
+	m_indices.clear(); // we don't need the indices anymore, they are now in the GPU memory
+	m_indices.shrink_to_fit();
 }

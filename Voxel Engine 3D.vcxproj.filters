@@ -57,9 +57,6 @@
     <ClCompile Include="Source\EngineManager\CameraManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Objects\Voxel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Objects\ColorCube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -76,6 +73,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Objects\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\Floor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\Chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\ChunkMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\Voxel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Objects\ChunkManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,9 +125,6 @@
     <ClInclude Include="Source\EngineManager\ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Objects\Offset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Objects\Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -123,9 +135,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\movement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Objects\Voxel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Objects\VoxelFace.h">
@@ -158,6 +167,24 @@
     <ClInclude Include="Source\Objects\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Objects\Floor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\Chunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\ChunkMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\Voxel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Objects\ChunkManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\Shaders\triangle.vert" />
@@ -174,5 +201,9 @@
     <None Include="Resource\Shaders\WoodBox.frag" />
     <None Include="Resource\Shaders\model.vert" />
     <None Include="Resource\Shaders\model.frag" />
+    <None Include="Resource\Shaders\skybox.vert" />
+    <None Include="Resource\Shaders\skybox.frag" />
+    <None Include="Resource\Shaders\chunk.frag" />
+    <None Include="Resource\Shaders\chunk.vert" />
   </ItemGroup>
 </Project>

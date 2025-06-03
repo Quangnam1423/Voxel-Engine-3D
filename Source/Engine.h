@@ -7,16 +7,7 @@
 
 #define ENGINE Engine::getInstance()
 
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-class Triangle;
-class Rectangle;
-class LightCube;
-class ColorCube;
-class WoodBox;
-class Cube;
-class Shader;
-class Model;
+class World;
 
 class Engine : public Singleton<Engine>
 {
@@ -32,12 +23,6 @@ public:
 		glViewport(0, 0, width, height);
 	}
 private:
-	Model* m_model;
-	Model* m_model2;
-	Shader* m_shader;
-	Cube* m_normalCube;
-	LightCube* m_lightCube;
-	ColorCube* m_colorCube;
-	WoodBox* m_woodBox;
+	World* m_world;
 	float m_elapseTime;
 };

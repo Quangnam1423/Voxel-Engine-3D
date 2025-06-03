@@ -25,12 +25,16 @@ class Model
 private:
 	std::vector<Texture> m_texture_loaded;
 	std::vector<Mesh*> m_meshes;
+	Shader* m_shader;
 	std::string m_directory;
+	glm::vec3 m_position;
 	bool m_gammaCorrection;
 public:
 	Model();
 	~Model();
-	void draw(Shader& shader);
+	void setShader(Shader* shader) { m_shader = shader; }
+	void setPosition(const glm::vec3& position) { m_position = position; }
+	void draw(glm::mat4 view, glm::mat4 projection);
 	void setDirectory(const std::string& directory) { m_directory = directory; }
 	std::string getDirectory() const { return m_directory; }
 	void setGammaCorrection(bool gamma) { m_gammaCorrection = gamma; }
