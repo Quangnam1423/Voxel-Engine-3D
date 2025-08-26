@@ -42,6 +42,12 @@ void WindowManager::setWindow(GLFWwindow* window)
 	glfwMakeContextCurrent(m_window);
 	glfwGetWindowSize(m_window, &m_windowSize.width, &m_windowSize.height);
 	glfwGetWindowPos(m_window, &m_windowPosition.x, &m_windowPosition.y);
+
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	int windowPosX = (mode->width - m_windowSize.width) / 2;
+	int windowPosY = (mode->height - m_windowSize.height) / 2;
+	glfwSetWindowPos(m_window, windowPosX, windowPosY);
 }
 
 GLFWwindow* WindowManager::getWindow()

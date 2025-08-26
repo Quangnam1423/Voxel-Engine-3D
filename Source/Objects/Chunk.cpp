@@ -7,11 +7,10 @@
 #include "Camera.h"
 
 Chunk::Chunk()
+	: m_position(0.0f), m_textureID(0), m_shader(nullptr), m_chunkMesh(nullptr),
+	m_isReadyToDraw(false), m_isMeshReady(false)
 {
-	m_shader = nullptr;
-	m_chunkMesh = nullptr;
 	m_voxels.resize(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE);
-	setupChunk();
 }
 
 Chunk::~Chunk()
@@ -37,8 +36,11 @@ void Chunk::setupChunk()
 	initChunk();
 	m_chunkMesh = new ChunkMesh();
 
-	std::vector<VoxelVertex> vertices;
-	std::vector<unsigned int> indices;
+	for (int i = 0; i < m_voxels.size(); i++) {
+		if (m_voxels[i] == nullptr) {
+			continue;
+		}
+	}
 
 	for (int z = 0; z < CHUNK_SIZE; z++)
 	{
@@ -51,92 +53,102 @@ void Chunk::setupChunk()
 				if (y + 1 >= CHUNK_SIZE)
 				{
 					std::vector<VoxelVertex> topface = m_voxels[index]->getFace(Face::TOP);
-					int count = static_cast<int>(vertices.size());
-					vertices.insert(vertices.end(), topface.begin(), topface.end());
+					int count = static_cast<int>(m_vertices.size());
+					m_vertices.insert(m_vertices.end(), topface.begin(), topface.end());
                     
-					indices.push_back(count);
-					indices.push_back(count + 1);
-					indices.push_back(count + 2);
-					indices.push_back(count);
-					indices.push_back(count + 2);
-					indices.push_back(count + 3);
+					m_indices.push_back(count);
+					m_indices.push_back(count + 1);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count + 3);
 				}
 
 				if (y - 1 < 0)
 				{
 					std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::BOTTOM);
-					int count = static_cast<int>(vertices.size());
-					vertices.insert(vertices.end(), bottomface.begin(), bottomface.end());
-					indices.push_back(count);
-					indices.push_back(count + 1);
-					indices.push_back(count + 2);
-					indices.push_back(count );
-					indices.push_back(count + 2);
-					indices.push_back(count + 3);
+					int count = static_cast<int>(m_vertices.size());
+					m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+					m_indices.push_back(count);
+					m_indices.push_back(count + 1);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count );
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count + 3);
 				}
 
 				if (x + 1 >= CHUNK_SIZE) 
 				{
 					std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::RIGHT);
-					int count = static_cast<int>(vertices.size());
-					vertices.insert(vertices.end(), bottomface.begin(), bottomface.end());
-					indices.push_back(count);
-					indices.push_back(count + 1);
-					indices.push_back(count + 2);
-					indices.push_back(count);
-					indices.push_back(count + 2);
-					indices.push_back(count + 3);
+					int count = static_cast<int>(m_vertices.size());
+					m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+					m_indices.push_back(count);
+					m_indices.push_back(count + 1);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count + 3);
 				}
 				
 				if(x - 1 < 0) 
 				{
 					std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::LEFT);
-					int count = static_cast<int>(vertices.size());
-					vertices.insert(vertices.end(), bottomface.begin(), bottomface.end());
-					indices.push_back(count);
-					indices.push_back(count + 1);
-					indices.push_back(count + 2);
-					indices.push_back(count);
-					indices.push_back(count + 2);
-					indices.push_back(count + 3);
+					int count = static_cast<int>(m_vertices.size());
+					m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+					m_indices.push_back(count);
+					m_indices.push_back(count + 1);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count + 3);
 				}
 
 				if (z + 1 >= CHUNK_SIZE) 
 				{
 					std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::FRONT);
-					int count = static_cast<int>(vertices.size());
-					vertices.insert(vertices.end(), bottomface.begin(), bottomface.end());
-					indices.push_back(count);
-					indices.push_back(count + 1);
-					indices.push_back(count + 2);
-					indices.push_back(count);
-					indices.push_back(count + 2);
-					indices.push_back(count + 3);
+					int count = static_cast<int>(m_vertices.size());
+					m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+					m_indices.push_back(count);
+					m_indices.push_back(count + 1);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count + 3);
 				}
 
 				if (z - 1 < 0) 
 				{
 					std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::BACK);
-					int count = static_cast<int>(vertices.size());
-					vertices.insert(vertices.end(), bottomface.begin(), bottomface.end());
-					indices.push_back(count);
-					indices.push_back(count + 1);
-					indices.push_back(count + 2);
-					indices.push_back(count);
-					indices.push_back(count + 2);
-					indices.push_back(count + 3);
+					int count = static_cast<int>(m_vertices.size());
+					m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+					m_indices.push_back(count);
+					m_indices.push_back(count + 1);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count);
+					m_indices.push_back(count + 2);
+					m_indices.push_back(count + 3);
 				}
 			}
 		}
 	}
-
-	m_chunkMesh->setupMesh(vertices, indices);
-	std::cout << "Chunk mesh setup complete with " << vertices.size() << " vertices and " << indices.size() << " indices." << std::endl;
+	m_isMeshReady = true;
+	//m_chunkMesh->setupMesh(m_vertices, m_indices);
 }
 
-
+void Chunk::setupMesh()
+{
+	if (m_chunkMesh == nullptr)
+	{
+		m_chunkMesh = new ChunkMesh();
+	}
+	m_chunkMesh->setupMesh(m_vertices, m_indices);
+	m_isReadyToDraw = true;
+}
 
 void Chunk::draw(glm::mat4 view, glm::mat4 projection) {
+	if (!m_isReadyToDraw) {
+		return;
+	}
 	glm::mat4 model(1.0f);
 	model = glm::translate(model, m_position);
 	m_shader->use();

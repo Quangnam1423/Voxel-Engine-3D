@@ -6,6 +6,9 @@
 Model::Model() {
 	m_shader = nullptr;
 	m_gammaCorrection = true;
+	m_isReadyToDraw = false;
+	m_directory = "";
+	m_position = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 Model::~Model() {

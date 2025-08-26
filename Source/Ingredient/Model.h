@@ -13,6 +13,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <atomic>
+#include <mutex>
 
 #include "Material.h"
 #include "Texture.h"
@@ -29,6 +31,10 @@ private:
 	std::string m_directory;
 	glm::vec3 m_position;
 	bool m_gammaCorrection;
+
+
+	std::atomic<bool> m_isReadyToDraw;
+	std::mutex m_mutex;
 public:
 	Model();
 	~Model();
@@ -40,6 +46,8 @@ public:
 	void setGammaCorrection(bool gamma) { m_gammaCorrection = gamma; }
 	void addMesh(Mesh* mesh);
 	std::vector<Texture> getTextures() const { return m_texture_loaded; }
+	std::mutex& getMutex() { return m_mutex; }
+	void setIsReadyToDraw(bool ready) { m_isReadyToDraw = ready; }
 	void addTexture(Texture texture) 
 	{ 
 		m_texture_loaded.push_back(texture); 

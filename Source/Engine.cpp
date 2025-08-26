@@ -56,9 +56,9 @@ void Engine::init()
 	glFrontFace(GL_CCW);
 	{
 		Camera* camera = new Camera();
-		camera->setPosition(glm::vec3(0.0f, 30.0f, 15.0f)); // Đặt camera cao hơn để thấy terrain
+		camera->setPosition(glm::vec3(-22.9384f, 20.3707f, 48.1196f));
 		camera->setWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
-		camera->setTarget({ 0.0f, 0.0f, 0.0f }); // Target cũng cao hơn
+		camera->setTarget(glm::vec3(-22.3352, 20.1152, 47.364));
 		CM->setCamera(camera);
 	}
 
@@ -79,6 +79,7 @@ void Engine::run()
 	while (!glfwWindowShouldClose(WINDOW_MANAGER->getWindow())) {
 		float deltaTime = static_cast<float>(glfwGetTime()) - m_elapseTime;
 		m_elapseTime = static_cast<float>(glfwGetTime());
+		std::cout << " camera target: " << CM->getCamera()->getTarget().x << " " << CM->getCamera()->getTarget().y << " " << CM->getCamera()->getTarget().z << std::endl;
 		INPUT_MANAGER->processInput(deltaTime);
 		m_world->update(deltaTime);
 		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);

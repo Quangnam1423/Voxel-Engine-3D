@@ -26,6 +26,6 @@ private:
 
 	Skybox* m_skybox;
 	Chunk* m_chunk;
-	Model* m_model;
+	//Model* m_model;
 };
 

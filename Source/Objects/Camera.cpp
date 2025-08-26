@@ -101,6 +101,10 @@ glm::vec3 Camera::getTarget()
 void Camera::setTarget(glm::vec3 target)
 {
 	m_target = target;
+	m_direction = glm::normalize(m_target - m_position);
+	m_pitch = glm::degrees(asin(m_direction.y));
+	m_yaw = glm::degrees(atan2(m_direction.z, m_direction.x));
+
 	updateCameraVectors();
 }
 

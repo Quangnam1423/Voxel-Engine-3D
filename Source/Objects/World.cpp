@@ -22,6 +22,9 @@ World::~World()
 
 void World::update(float deltaTime)
 {
+	if (m_chunk && m_chunk->isMeshReady() && !m_chunk->isReadyToDraw()) {
+		m_chunk->setupMesh();
+	}
 }
 
 void World::draw() {
@@ -30,8 +33,10 @@ void World::draw() {
 	float aspect = (float)WINDOW_MANAGER->getWindowSize().width / (float)WINDOW_MANAGER->getWindowSize().height;
 	glm::mat4 projection = glm::perspective(glm::radians(CM->getCamera()->getZoom()), aspect, 0.1f, 500.f);
 
-	m_chunk->draw(view, projection);
-	m_model->draw(view, projection);
+	if (m_chunk->isReadyToDraw()) {
+		m_chunk->draw(view, projection);
+	}
+	//m_model->draw(view, projection);
 	glDepthMask(GL_FALSE);
 	m_skybox->draw(view, projection);
 	glDepthMask(GL_TRUE);
@@ -61,14 +66,24 @@ void World::init()
 		m_chunk->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
 		m_chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
 		m_chunk->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+		std::thread setupThread([this]() {
+			this->m_chunk->setupChunk();
+			std::cout << "Chunk data prepared in background thread." << std::endl;
+			});
+		setupThread.detach();
+		//m_chunk->setupChunk();
+		//m_chunk->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
+		//m_chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
+		//m_chunk->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	}
 
-	// init model
-	{
-		m_model = DATA->getModel("Resource/Models/backpack/backpack.obj");
-		m_model->setShader(new Shader("Resource/Shaders/model.vert", "Resource/Shaders/model.frag"));
-		m_model->setPosition({ 0.0f, 20.0f, 15.0f });
-	}
+	//// init model
+	//{
+	//	m_model = DATA->getModel("Resource/Models/backpack/backpack.obj");
+	//	m_model->setShader(new Shader("Resource/Shaders/model.vert", "Resource/Shaders/model.frag"));
+	//	m_model->setPosition({ 0.0f, 20.0f, 15.0f });
+	//}
 }
 
 void World::cleanup()
@@ -83,8 +98,8 @@ void World::cleanup()
 		m_chunk = nullptr;
 	}
 
-	if (m_model) {
-		delete m_model;
-		m_model = nullptr;
-	}
+	//if (m_model) {
+	//	delete m_model;
+	//	m_model = nullptr;
+	//}
 }
