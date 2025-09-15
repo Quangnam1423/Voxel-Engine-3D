@@ -16,10 +16,10 @@ Chunk::Chunk()
 
 Chunk::~Chunk()
 {
-	if (m_shader) {		
-		delete m_shader;
-		m_shader = nullptr;
-	}
+	//if (m_shader) {		
+	//	delete m_shader;
+	//	m_shader = nullptr;
+	//}
 
 	if (m_chunkMesh) {
 		delete m_chunkMesh;

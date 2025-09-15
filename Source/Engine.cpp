@@ -87,6 +87,7 @@ void Engine::run()
 		//	<< CM->getCamera()->getTarget().x << ", "
 		//	<< CM->getCamera()->getTarget().y << ", "
 		//	<< CM->getCamera()->getTarget().z << std::endl;
+		std::cout << "FPS: " << 1.0f / deltaTime << std::endl;
 		INPUT_MANAGER->processInput(deltaTime);
 		m_world->update(deltaTime);
 		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
