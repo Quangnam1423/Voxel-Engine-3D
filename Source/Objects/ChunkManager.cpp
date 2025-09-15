@@ -1,185 +1,231 @@
 #include "ChunkManager.h"
-#include "Shader.h"
+
+//#include "ChunkManager.h"
+//#include "Shader.h"
+//#include "Chunk.h"
+//#include "../EngineManager/CameraManager.h"
+//#include "../EngineManager/WindowManager.h"
+//#include "Camera.h"
+//
+//#include <unordered_set>
+#include "../EngineManager/ResourceManager.h"
 #include "Chunk.h"
-#include "../EngineManager/CameraManager.h"
-#include "../EngineManager/WindowManager.h"
-#include "Camera.h"
+#include "Shader.h"
 
-#include <unordered_set>
-
-
-ChunkManager::ChunkManager(Shader* shader, GLuint textureID)
+ChunkManager::ChunkManager()
 {
-	m_shader = shader;
-	m_textureID = textureID;
+	m_shader = NULL;
 	m_running = true;
-	m_workerThread = std::thread(&ChunkManager::backgroundThread, this);
+	// initialize thread to load chunks and unload chunks.
+	// for now, we will not use multithreading to load chunks.
+	m_running = true;
+	std::thread loadChunkThread([this] {
+		std::unique_lock<std::mutex> lock(m_loadQueueMutex);
+		while (true)
+		{
+			m_cvLoadChunk.wait(lock, [this] {return !m_chunkLoadQueue.empty() || !m_running;} );
+			if (!m_running) {
+				break;
+			}
+
+			while (!m_chunkLoadQueue.empty())
+			{
+				std::tuple<int, int, int> chunkPos = m_chunkLoadQueue.front();
+				m_chunkLoadQueue.pop();
+
+				Chunk* newChunk = nullptr;
+				{
+					newChunk = new Chunk();
+					newChunk->setShader(m_shader);
+					newChunk->setPosition(
+						glm::vec3(std::get<0>(chunkPos) * 16.0f,
+							std::get<1>(chunkPos) * 16.0f,
+							std::get<2>(chunkPos) * 16.0f)
+					);
+				}
+				// load chunk data before insert into map.
+				std::thread setupThread([newChunk]() {
+					newChunk->setupChunk();
+					});
+				setupThread.join(); // wait until chunk data is prepared.
+
+				// insert new chunk to map
+				{
+					std::lock_guard<std::mutex> chunksLock(m_chunksMapMutex);
+					m_chunks[chunkPos] = newChunk;
+				}
+			}
+		}
+	});
+	loadChunkThread.detach();
+
+	//--------------------------UNLOAD_CHUNKS__THREAD------------------------------
+
+	std::thread unloadChunkThread([this] {
+		std::unique_lock<std::mutex> lock(m_unloadQueueMutex);
+		while (true)
+		{
+			m_cvUnloadChunk.wait(lock, [this] {return !m_chunkUnloadQueue.empty() || !m_running;  });
+			if (!m_running) {
+				break;
+			}
+
+			while (!m_chunkUnloadQueue.empty())
+			{
+				std::tuple<int, int, int> chunkPos = m_chunkUnloadQueue.front();
+				m_chunkUnloadQueue.pop();
+
+				{
+					std::lock_guard<std::mutex> chunkLock(m_chunksMapMutex);
+					if (m_chunks.find(chunkPos) != m_chunks.end()) {
+						Chunk* chunk = m_chunks[chunkPos];
+						delete chunk;
+						m_chunks.erase(chunkPos);
+					}
+				}
+			}
+		}
+	});
+	unloadChunkThread.detach();
 }
 
 ChunkManager::~ChunkManager()
 {
-	m_running = false;
-	if (m_workerThread.joinable())
-		m_workerThread.join();
-
+	Stop();
 	for (auto& pair : m_chunks) {
 		delete pair.second;
 	}
 	m_chunks.clear();
-}
 
-std::tuple<int, int, int> ChunkManager::worldToChunkCoord(const glm::vec3& pos) const {
-	return {
-		static_cast<int>(std::floor(pos.x / CHUNK_SIZE)),
-		static_cast<int>(std::floor(pos.y / CHUNK_SIZE)),
-		static_cast<int>(std::floor(pos.z / CHUNK_SIZE))
-	};
-}
-
-glm::vec3 ChunkManager::chunkCoordToWorldPos(const std::tuple<int, int, int>& coord) const {
-	return glm::vec3(
-		std::get<0>(coord) * CHUNK_SIZE,
-		std::get<1>(coord) * CHUNK_SIZE,
-		std::get<2>(coord) * CHUNK_SIZE
-	);
-}
-
-void ChunkManager::update(float deltaTime)
-{
-	auto cameraChunkPos = worldToChunkCoord(CM->getCamera()->getPosition());
-	std::unordered_set<std::tuple<int, int, int>, Tuple3DHasher> requiredChunks;
-
-	// First gather all required chunks without locking
-	for (int x = -DISTANCE_TO_LOAD; x <= DISTANCE_TO_LOAD; ++x) {
-		for (int y = -DISTANCE_TO_LOAD; y <= DISTANCE_TO_LOAD; ++y) {
-			auto chunkPos = std::make_tuple(
-				std::get<0>(cameraChunkPos) + x,
-				std::get<1>(cameraChunkPos) + y,
-				0
-			);
-			requiredChunks.insert(chunkPos);
-		}
-	}
-
-	std::vector<std::tuple<int, int, int>> chunksToLoad;
-	std::vector<std::tuple<int, int, int>> chunksToUnload;
-
-	// Then use a single lock section to check what needs to be loaded/unloaded
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-
-		// Check what chunks need to be loaded
-		for (const auto& chunkPos : requiredChunks) {
-			if (m_chunks.find(chunkPos) == m_chunks.end()) {
-				chunksToLoad.push_back(chunkPos);
-			}
-		}
-
-		// Check what chunks need to be unloaded
-		for (auto it = m_chunks.begin(); it != m_chunks.end(); ++it) {
-			if (requiredChunks.find(it->first) == requiredChunks.end()) {
-				chunksToUnload.push_back(it->first);
-			}
-		}
-	}
-
-	// Finally, lock the queue mutex to update the work queues
-	{
-		std::lock_guard<std::mutex> qLock(m_queueMutex);
-		for (const auto& pos : chunksToLoad) {
-			m_chunksToLoad.push(pos);
-		}
-		for (const auto& pos : chunksToUnload) {
-			m_chunksToUnload.push(pos);
-		}
+	if (m_shader != NULL) {
+		delete m_shader;
+		m_shader = nullptr;
 	}
 }
 
-
-void ChunkManager::drawVisibleChunks()
+void ChunkManager::Update(float deltaTime, const glm::vec3& cameraPosition)
 {
-
-	std::lock_guard<std::mutex> lock(m_mutex);
-	glm::mat4 view = CM->getCamera()->getViewMatrix();
-	glm::vec3 cameraPosition = CM->getCamera()->getPosition();
-	float aspect = (float)WINDOW_MANAGER->getWindowSize().width / (float)WINDOW_MANAGER->getWindowSize().height;
-	glm::mat4 projection = glm::perspective(glm::radians(CM->getCamera()->getZoom()), aspect, 0.1f, 500.f);
-
-	for (auto& [pos, chunks] : m_chunks) {
-		std::cout << "drawing chunk at: " << std::get<0>(pos) << ", " << std::get<1>(pos) << ", " << std::get<2>(pos) << std::endl;
-		chunks->draw(view, projection);
-	}
-}
-
-void ChunkManager::updateVisibleChunks()
-{
-}
-
-void ChunkManager::backgroundThread()
-{
-	while (m_running) {
-		// Process a batch of work to avoid holding locks for too long
-		std::vector<std::tuple<int, int, int>> chunksToProcess;
-		std::vector<std::tuple<int, int, int>> chunksToRemove;
-
-		// First get work items from the queue with minimal locking
+	float x = cameraPosition.x - m_lastCameraPos.x;
+	float y = cameraPosition.y - m_lastCameraPos.y;
+	float z = cameraPosition.z - m_lastCameraPos.z;
+	if (sqrt(x * x + y * y + z * z) > 1.0f) {
+		// init new chunk load around the camera position
+		int r2 = DISTANCE_TO_LOAD * DISTANCE_TO_LOAD;
+		for (int dx = -DISTANCE_TO_LOAD; dx <= DISTANCE_TO_LOAD; dx++)
 		{
-			std::lock_guard<std::mutex> queueLock(m_queueMutex);
+			int dx2 = dx * dx;
+			int dzMax = static_cast<int>(std::floor(std::sqrt((double)r2 - dx2)));
 
-			// Get chunks to load (limited batch size)
-			const size_t maxBatchSize = 5;  // Adjust based on performance
-			size_t count = 0;
-			while (!m_chunksToLoad.empty() && count < maxBatchSize) {
-				chunksToProcess.push_back(m_chunksToLoad.front());
-				m_chunksToLoad.pop();
-				count++;
-			}
-
-			// Get chunks to unload
-			count = 0;
-			while (!m_chunksToUnload.empty() && count < maxBatchSize) {
-				chunksToRemove.push_back(m_chunksToUnload.front());
-				m_chunksToUnload.pop();
-				count++;
-			}
-		}
-
-		// Process new chunks outside of locks
-		std::vector<std::pair<std::tuple<int, int, int>, Chunk*>> newChunks;
-		for (const auto& coord : chunksToProcess) {
-			Chunk* chunk = new Chunk();
-			glm::vec3 worldPos = chunkCoordToWorldPos(coord);
-			chunk->setPosition(worldPos);
-			chunk->setShader(m_shader);
-			chunk->setTexture(m_textureID);
-			newChunks.emplace_back(coord, chunk);
-		}
-
-		// Now update the main chunk map
-		if (!newChunks.empty() || !chunksToRemove.empty()) {
-			std::lock_guard<std::mutex> mapLock(m_mutex);
-
-			// Add newly created chunks
-			for (auto& [coord, chunk] : newChunks) {
-				m_chunks[coord] = chunk;
-			}
-
-			// Remove chunks scheduled for deletion
-			for (const auto& coord : chunksToRemove) {
-				auto it = m_chunks.find(coord);
-				if (it != m_chunks.end()) {
-					delete it->second;
-					m_chunks.erase(it);
+			for (int dz = -dzMax; dz <= dzMax; dz++)
+			{
+				std::tuple<int, int, int> chunkPos = std::make_tuple(
+					static_cast<int>(std::floor(cameraPosition.x / 16.0f)) + dx,
+					0, // y is always 0 for now.
+					static_cast<int>(std::floor(cameraPosition.z / 16.0f)) + dz
+				);
+				// if chunk not exist, add to load queue
+				{
+					std::lock_guard<std::mutex> lock(m_chunksMapMutex);
+					if (m_chunks.find(chunkPos) != m_chunks.end()) {
+						continue;
+					}
+				}
+				// add to load queue
+				{
+					std::lock_guard<std::mutex> lock(m_loadQueueMutex);
+					m_chunkLoadQueue.push(chunkPos);
 				}
 			}
 		}
+		m_cvLoadChunk.notify_one();
 
-		// If no work was done, sleep to avoid busy waiting
-		if (chunksToProcess.empty() && chunksToRemove.empty()) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(50));  // Longer sleep when idle
+		for (auto& pair : m_chunks)
+		{
+			std::tuple<int, int, int> chunkPos = pair.first;
+			int chunkX = std::get<0>(chunkPos);
+			int chunkZ = std::get<2>(chunkPos);
+			int camChunkX = static_cast<int>(std::floor(cameraPosition.x / 16.0f));
+			int camChunkZ = static_cast<int>(std::floor(cameraPosition.z / 16.0f));
+			int distX = chunkX - camChunkX;
+			int distZ = chunkZ - camChunkZ;
+			if (distX * distX + distZ * distZ > r2)
+			{
+				// add to unload queue
+				{
+					std::lock_guard<std::mutex> lock(m_unloadQueueMutex);
+					m_chunkUnloadQueue.push(chunkPos);
+				}
+			}
 		}
-		else {
-			std::this_thread::sleep_for(std::chrono::milliseconds(5));   // Short sleep between batches
+		m_cvUnloadChunk.notify_one();
+	}
+	// lock m_chunks and load chunk.
+	{
+		std::lock_guard<std::mutex> lock(m_chunksMapMutex);
+		for (auto& pair : m_chunks)
+		{
+			Chunk* chunk = pair.second;
+			if (chunk->isMeshReady() && !chunk->isReadyToDraw()) {
+				if (chunk->getTexture() == -1) {
+					chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
+				}
+				chunk->setupMesh();
+			}
 		}
 	}
+	// end the function
+	return;
+}
+
+void ChunkManager::DrawVisibleChunks(const glm::mat4& view, const glm::mat4& projection)
+{
+	// draw all chunks that are ready to draw
+	{
+		std::lock_guard<std::mutex> lock(m_chunksMapMutex);
+		for (auto& pair : m_chunks)
+		{
+			Chunk* chunk = pair.second;
+			if (chunk->isReadyToDraw())
+			{
+				chunk->draw(view, projection);
+			}
+		}
+	}
+}
+
+
+/// <summary>
+/// - Load chunk when the first time init the chunk manager.
+/// first time init, we will load chunks around the camera position.
+/// </summary>
+/// <param name="cameraPosition"></param>
+void ChunkManager::Init(const glm::vec3& cameraPosition)
+{
+	// for now, we are loading chunks that has depth = 0.
+	// that mean y default = 0.
+	int x = static_cast<int>(floor(cameraPosition.x)) / 16;
+	int y = static_cast<int>(floor(cameraPosition.y)) / 16;
+	int z = static_cast<int>(floor(cameraPosition.z)) / 16;
+
+	for (int i = -DISTANCE_TO_LOAD; i <= DISTANCE_TO_LOAD; i++)
+	{
+		for (int j = -DISTANCE_TO_LOAD; j <= DISTANCE_TO_LOAD; j++)
+		{
+			int chunkX = x + i;
+			int chunkY = 0; // y is always 0 for now.
+			int chunkZ = z + j;
+			std::tuple<int, int, int> chunkPos = std::make_tuple(chunkX, chunkY, chunkZ);
+			{
+				std::lock_guard<std::mutex> lock(m_loadQueueMutex);
+				m_chunkLoadQueue.push(chunkPos);
+			}
+		}
+	}
+	m_cvLoadChunk.notify_one();
+	return;
+}
+
+void ChunkManager::Stop()
+{
+	m_running = false;
 }

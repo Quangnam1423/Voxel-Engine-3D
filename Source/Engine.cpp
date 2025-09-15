@@ -56,9 +56,9 @@ void Engine::init()
 	glFrontFace(GL_CCW);
 	{
 		Camera* camera = new Camera();
-		camera->setPosition(glm::vec3(-22.9384f, 20.3707f, 48.1196f));
+		camera->setPosition(glm::vec3(-173.625f, 67.1448f, 304.56f));
 		camera->setWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
-		camera->setTarget(glm::vec3(-22.3352, 20.1152, 47.364));
+		camera->setTarget(glm::vec3(-172.715f, 66.734f, 304.613f));
 		CM->setCamera(camera);
 	}
 
@@ -79,7 +79,14 @@ void Engine::run()
 	while (!glfwWindowShouldClose(WINDOW_MANAGER->getWindow())) {
 		float deltaTime = static_cast<float>(glfwGetTime()) - m_elapseTime;
 		m_elapseTime = static_cast<float>(glfwGetTime());
-		std::cout << " camera target: " << CM->getCamera()->getTarget().x << " " << CM->getCamera()->getTarget().y << " " << CM->getCamera()->getTarget().z << std::endl;
+		//std::cout << "Camera Position: "
+		//	<< CM->getCamera()->getPosition().x << ", "
+		//	<< CM->getCamera()->getPosition().y << ", "
+		//	<< CM->getCamera()->getPosition().z << std::endl;
+		//std::cout << "camera Target: "
+		//	<< CM->getCamera()->getTarget().x << ", "
+		//	<< CM->getCamera()->getTarget().y << ", "
+		//	<< CM->getCamera()->getTarget().z << std::endl;
 		INPUT_MANAGER->processInput(deltaTime);
 		m_world->update(deltaTime);
 		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);

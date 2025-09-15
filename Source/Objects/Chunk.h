@@ -29,6 +29,7 @@ public:
 	void setPosition(glm::vec3 position) { m_position = position; }
 	void initChunk();
 	void setTexture(GLuint textureId) { m_textureID = textureId; }
+	GLuint getTexture() const { return m_textureID; }
 	std::atomic<bool>& isReadyToDraw() { return m_isReadyToDraw; }
 	std::atomic<bool>& isMeshReady() { return m_isMeshReady; }
 private:

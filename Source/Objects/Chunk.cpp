@@ -1,4 +1,4 @@
-#include "Chunk.h"
+﻿#include "Chunk.h"
 
 #include "Shader.h"
 #include "ChunkMesh.h"
@@ -10,6 +10,7 @@ Chunk::Chunk()
 	: m_position(0.0f), m_textureID(0), m_shader(nullptr), m_chunkMesh(nullptr),
 	m_isReadyToDraw(false), m_isMeshReady(false)
 {
+	m_textureID = -1;
 	m_voxels.resize(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE);
 }
 
@@ -33,8 +34,8 @@ Chunk::~Chunk()
 
 void Chunk::setupChunk()
 {
-	initChunk();
-	m_chunkMesh = new ChunkMesh();
+	initChunk(); // khởi tạo cac voxel trong chunk.
+	m_chunkMesh = new ChunkMesh(); // khởi tạo mesh cho chunk.
 
 	for (int i = 0; i < m_voxels.size(); i++) {
 		if (m_voxels[i] == nullptr) {
@@ -132,7 +133,6 @@ void Chunk::setupChunk()
 		}
 	}
 	m_isMeshReady = true;
-	//m_chunkMesh->setupMesh(m_vertices, m_indices);
 }
 
 void Chunk::setupMesh()
@@ -152,7 +152,7 @@ void Chunk::draw(glm::mat4 view, glm::mat4 projection) {
 	glm::mat4 model(1.0f);
 	model = glm::translate(model, m_position);
 	m_shader->use();
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0); 
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 	m_shader->setInt("material.diffuse", 0);
 	m_shader->setVec3("light.position", CM->getCamera()->getDirection());
@@ -167,6 +167,14 @@ void Chunk::draw(glm::mat4 view, glm::mat4 projection) {
 	m_chunkMesh->draw(*m_shader,model, view, projection);
 }
 
+
+/// <summary>
+///	- Khởi tạo các các khối ở trong chunk.
+/// - Hiện tại đang khởi tạo mặc định tất cả các khối có trong chunk.
+/// - Tuy nhiên trong một khối chunk thì các voxel sẽ có các thuộc tính khác nhau.
+/// - Cần phải sử dụng Noise để có thể tạo ra các khối với các thuộc tính khác nhau.
+///
+/// </summary>
 void Chunk::initChunk()
 {
 	for (int z = 0; z < CHUNK_SIZE; z++)

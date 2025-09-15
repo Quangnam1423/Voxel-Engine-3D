@@ -1,13 +1,17 @@
 #pragma once
+
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <map>
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <shared_mutex>
 #include <condition_variable>
 #include <queue>
 #include <future> 
+#include <unordered_map>
 
 #define DISTANCE_TO_LOAD 8
 
@@ -28,34 +32,34 @@ struct Tuple3DHasher {
     }
 };
 
+
 class ChunkManager
 {
 public:
-
-	ChunkManager(Shader* shader, GLuint textureID);
+    ChunkManager();
 	~ChunkManager();
-	std::tuple<int, int, int> worldToChunkCoord(const glm::vec3& pos) const;
-	glm::vec3 chunkCoordToWorldPos(const std::tuple<int, int, int>& coord) const;
-    void drawVisibleChunks();
-	void updateVisibleChunks();
-	void update(float delaTime);
 
+	void Update(float detlaTime, const glm::vec3& cameraPosition);
+    void DrawVisibleChunks(const glm::mat4& view, const glm::mat4& projection);
+    void Init(const glm::vec3& cameraPosition);
+    void Stop();
+	void setShader(Shader* shader) { m_shader = shader; }
 private:
-    void backgroundThread();
+    // map to manage chunks
+	std::unordered_map<std::tuple<int, int, int>, Chunk*, Tuple3DHasher> m_chunks;
+	std::mutex m_chunksMapMutex;
+    // chunk load queue and mutex
+    std::queue <std::tuple<int, int, int> > m_chunkLoadQueue;
+	std::mutex m_loadQueueMutex;
+    // chunk unload queue and mutex
+    std::queue <std::tuple<int, int, int> > m_chunkUnloadQueue;
+	std::mutex m_unloadQueueMutex;
 
-private:
-	std::queue<std::tuple<int, int, int>> m_chunksToLoad;
-	std::queue<std::tuple<int, int, int>> m_chunksToUnload;
-	std::mutex m_mutex;
-    std::mutex m_queueMutex;
+    std::condition_variable m_cvLoadChunk;
+	std::condition_variable m_cvUnloadChunk;
+    std::atomic<bool> m_running;
 
-	std::thread m_workerThread;
-
-	bool m_running;
-
-    std::unordered_map<std::tuple<int, int, int>, Chunk*, Tuple3DHasher> m_chunks;
-
+    // shader and 
     Shader* m_shader;
-	GLuint m_textureID;
+	glm::vec3 m_lastCameraPos;
 };
-
