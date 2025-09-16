@@ -246,22 +246,6 @@ void ChunkManager::Init(const glm::vec3& cameraPosition)
 		}
 	}
 	m_cvLoadChunk.notify_one();
-
-	//for (int i = -DISTANCE_TO_LOAD; i <= DISTANCE_TO_LOAD; i++)
-	//{
-	//	for (int j = -DISTANCE_TO_LOAD; j <= DISTANCE_TO_LOAD; j++)
-	//	{
-	//		int chunkX = x + i;
-	//		int chunkY = 0; // y is always 0 for now.
-	//		int chunkZ = z + j;
-	//		std::tuple<int, int, int> chunkPos = std::make_tuple(chunkX, chunkY, chunkZ);
-	//		{
-	//			std::lock_guard<std::mutex> lock(m_loadQueueMutex);
-	//			m_chunkLoadQueue.push(chunkPos);
-	//		}
-	//	}
-	//}
-	//m_cvLoadChunk.notify_one();
 	return;
 }
 
