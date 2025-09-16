@@ -46,7 +46,7 @@ ChunkManager::ChunkManager()
 				// load chunk data before insert into map.
 				std::thread setupThread([newChunk]() {
 					newChunk->setupChunk();
-					});
+				});
 				setupThread.join(); // wait until chunk data is prepared.
 
 				// insert new chunk to map
@@ -138,27 +138,44 @@ void ChunkManager::Update(float deltaTime, const glm::vec3& cameraPosition)
 			}
 		}
 		m_cvLoadChunk.notify_one();
+//---------------------------------------END_LOAD_NEW_CHUNKS---------------------------------
 
-		for (auto& pair : m_chunks)
+
+
+		// get current chunk positions in chunks map
+		std::vector<std::tuple<int, int, int>> CurrentChunkPosition;
 		{
-			std::tuple<int, int, int> chunkPos = pair.first;
-			int chunkX = std::get<0>(chunkPos);
-			int chunkZ = std::get<2>(chunkPos);
-			int camChunkX = static_cast<int>(std::floor(cameraPosition.x / 16.0f));
-			int camChunkZ = static_cast<int>(std::floor(cameraPosition.z / 16.0f));
-			int distX = chunkX - camChunkX;
-			int distZ = chunkZ - camChunkZ;
-			if (distX * distX + distZ * distZ > r2)
+			std::lock_guard<std::mutex> chunksMapLock(m_chunksMapMutex);
+			CurrentChunkPosition.reserve(m_chunks.size());
+			for (auto& pair : m_chunks)
 			{
-				// add to unload queue
-				{
-					std::lock_guard<std::mutex> lock(m_unloadQueueMutex);
-					m_chunkUnloadQueue.push(chunkPos);
-				}
+				CurrentChunkPosition.push_back(pair.first);
 			}
 		}
-		m_cvUnloadChunk.notify_one();
+		// check which chunk need to unload
+		{
+			for (auto& chunkPos : CurrentChunkPosition)
+			{
+				int cx = std::get<0>(chunkPos);
+				int cz = std::get<2>(chunkPos);
+				int camChunkX = static_cast<int>(std::floor(cameraPosition.x / 16.0f));
+				int camChunkZ = static_cast<int>(std::floor(cameraPosition.z / 16.0f));
+				int dx = cx - camChunkX;
+				int dz = cz - camChunkZ;
+				if (dx * dx + dz * dz > r2)
+				{
+					// add to unload queue
+					{
+						std::lock_guard<std::mutex> lock(m_unloadQueueMutex);
+						m_chunkUnloadQueue.push(chunkPos);
+					}
+				}
+			}
+			m_cvUnloadChunk.notify_one();
+		} // end if stage of update chunks in case that camera moved too far.
 	}
+	// ----------------------------------------END_UNLOAD_FAR_CHUNKS---------------------------------
+
 	// lock m_chunks and load chunk.
 	{
 		std::lock_guard<std::mutex> lock(m_chunksMapMutex);
@@ -207,14 +224,21 @@ void ChunkManager::Init(const glm::vec3& cameraPosition)
 	int y = static_cast<int>(floor(cameraPosition.y)) / 16;
 	int z = static_cast<int>(floor(cameraPosition.z)) / 16;
 
-	for (int i = -DISTANCE_TO_LOAD; i <= DISTANCE_TO_LOAD; i++)
+	int r2 = DISTANCE_TO_LOAD * DISTANCE_TO_LOAD;
+	for (int dx = -DISTANCE_TO_LOAD; dx <= DISTANCE_TO_LOAD; dx++)
 	{
-		for (int j = -DISTANCE_TO_LOAD; j <= DISTANCE_TO_LOAD; j++)
+		int dx2 = dx * dx;
+		int dzMax = static_cast<int>(std::floor(std::sqrt((double)r2 - dx2)));
+
+		for (int dz = -dzMax; dz <= dzMax; dz++)
 		{
-			int chunkX = x + i;
-			int chunkY = 0; // y is always 0 for now.
-			int chunkZ = z + j;
-			std::tuple<int, int, int> chunkPos = std::make_tuple(chunkX, chunkY, chunkZ);
+			std::tuple<int, int, int> chunkPos = std::make_tuple(
+				static_cast<int>(std::floor(cameraPosition.x / 16.0f)) + dx,
+				0, // y is always 0 for now.
+				static_cast<int>(std::floor(cameraPosition.z / 16.0f)) + dz
+			);
+
+			// add new chunk pos into the loadChunkQueue
 			{
 				std::lock_guard<std::mutex> lock(m_loadQueueMutex);
 				m_chunkLoadQueue.push(chunkPos);

@@ -43,5 +43,13 @@ private:
 	std::mutex m_mutex;
 	std::atomic<bool> m_isReadyToDraw;
 	std::atomic<bool> m_isMeshReady;
+
+	static FastNoiseLite& getNoise() {
+		static FastNoiseLite noise2d;
+		noise2d.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+		noise2d.SetSeed(1337);
+		noise2d.SetFrequency(0.015f);
+		return noise2d;
+	}
 };
 

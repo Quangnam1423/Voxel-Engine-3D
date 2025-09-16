@@ -175,6 +175,7 @@
     <ClCompile Include="Source\Objects\Voxel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\include\FastNoiseLite.h" />
     <ClInclude Include="Source\Objects\ChunkManager.h" />
     <ClInclude Include="Source\Objects\ChunkMesh.h" />
     <ClInclude Include="Source\Objects\Chunk.h" />

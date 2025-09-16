@@ -16,10 +16,10 @@ Chunk::Chunk()
 
 Chunk::~Chunk()
 {
-	if (m_shader) {		
-		delete m_shader;
-		m_shader = nullptr;
-	}
+	//if (m_shader) {		
+	//	delete m_shader;
+	//	m_shader = nullptr;
+	//}
 
 	if (m_chunkMesh) {
 		delete m_chunkMesh;
@@ -47,12 +47,14 @@ void Chunk::setupChunk()
 	{
 		for (int x = 0 ; x < CHUNK_SIZE; x++)
 		{
+			//float x_noise = static_cast<float>(x) * CHUNK_SIZE + m_position.x;
+			//float z_noise = static_cast<float>(z) * CHUNK_SIZE + m_position.z;
+			//int heightSize = CHUNK_SIZE * noise2d.GetNoise(x_noise, z_noise);
 			for (int y = 0; y < CHUNK_SIZE; y++)
 			{
 				unsigned int index = x + z * CHUNK_SIZE + y * CHUNK_SIZE * CHUNK_SIZE;
 				
-				if (y + 1 >= CHUNK_SIZE)
-				{
+				if (y + 1 >= CHUNK_SIZE) {
 					std::vector<VoxelVertex> topface = m_voxels[index]->getFace(Face::TOP);
 					int count = static_cast<int>(m_vertices.size());
 					m_vertices.insert(m_vertices.end(), topface.begin(), topface.end());
@@ -64,6 +66,22 @@ void Chunk::setupChunk()
 					m_indices.push_back(count + 2);
 					m_indices.push_back(count + 3);
 				}
+				//else
+				//{
+				//	if (m_voxels[x + z * CHUNK_SIZE + (y = 1) * CHUNK_SIZE * CHUNK_SIZE]->getType() == Type::AIR)
+				//	{
+				//		std::vector<VoxelVertex> topface = m_voxels[index]->getFace(Face::TOP);
+				//		int count = static_cast<int>(m_vertices.size());
+				//		m_vertices.insert(m_vertices.end(), topface.begin(), topface.end());
+
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 1);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count + 3);
+				//	}
+				//}
 
 				if (y - 1 < 0)
 				{
@@ -77,6 +95,21 @@ void Chunk::setupChunk()
 					m_indices.push_back(count + 2);
 					m_indices.push_back(count + 3);
 				}
+				//else
+				//{
+				//	if (m_voxels[x + z * CHUNK_SIZE + (y - 1) * CHUNK_SIZE * CHUNK_SIZE]->getType() == Type::AIR)
+				//	{
+				//		std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::BOTTOM);
+				//		int count = static_cast<int>(m_vertices.size());
+				//		m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 1);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count + 3);
+				//	}
+				//}
 
 				if (x + 1 >= CHUNK_SIZE) 
 				{
@@ -90,6 +123,21 @@ void Chunk::setupChunk()
 					m_indices.push_back(count + 2);
 					m_indices.push_back(count + 3);
 				}
+				//else
+				//{
+				//	if (m_voxels[x + 1 + z * CHUNK_SIZE + y * CHUNK_SIZE * CHUNK_SIZE]->getType() == Type::AIR)
+				//	{
+				//		std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::RIGHT);
+				//		int count = static_cast<int>(m_vertices.size());
+				//		m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 1);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count + 3);
+				//	}
+				//}
 				
 				if(x - 1 < 0) 
 				{
@@ -103,6 +151,21 @@ void Chunk::setupChunk()
 					m_indices.push_back(count + 2);
 					m_indices.push_back(count + 3);
 				}
+				//else
+				//{
+				//	if (m_voxels[x - 1 + z * CHUNK_SIZE + y * CHUNK_SIZE * CHUNK_SIZE]->getType() == Type::AIR)
+				//	{
+				//		std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::LEFT);
+				//		int count = static_cast<int>(m_vertices.size());
+				//		m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 1);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count + 3);
+				//	}
+				//}
 
 				if (z + 1 >= CHUNK_SIZE) 
 				{
@@ -116,6 +179,21 @@ void Chunk::setupChunk()
 					m_indices.push_back(count + 2);
 					m_indices.push_back(count + 3);
 				}
+				//else
+				//{
+				//	if (m_voxels[x + (z + 1) * CHUNK_SIZE + y * CHUNK_SIZE * CHUNK_SIZE]->getType() == Type::AIR)
+				//	{
+				//		std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::FRONT);
+				//		int count = static_cast<int>(m_vertices.size());
+				//		m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 1);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count + 3);
+				//	}
+				//}
 
 				if (z - 1 < 0) 
 				{
@@ -129,6 +207,21 @@ void Chunk::setupChunk()
 					m_indices.push_back(count + 2);
 					m_indices.push_back(count + 3);
 				}
+				//else
+				//{
+				//	if (m_voxels[x + (z - 1) * CHUNK_SIZE + y * CHUNK_SIZE * CHUNK_SIZE]->getType() == Type::AIR && z - 1 >= 0)
+				//	{
+				//		std::vector<VoxelVertex> bottomface = m_voxels[index]->getFace(Face::BACK);
+				//		int count = static_cast<int>(m_vertices.size());
+				//		m_vertices.insert(m_vertices.end(), bottomface.begin(), bottomface.end());
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 1);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count);
+				//		m_indices.push_back(count + 2);
+				//		m_indices.push_back(count + 3);
+				//	}
+				//}
 			}
 		}
 	}
@@ -177,14 +270,23 @@ void Chunk::draw(glm::mat4 view, glm::mat4 projection) {
 /// </summary>
 void Chunk::initChunk()
 {
+	FastNoiseLite noise2d = getNoise();
 	for (int z = 0; z < CHUNK_SIZE; z++)
 	{
 		for (int x = 0; x < CHUNK_SIZE; x++)
 		{
+			float x_noise = static_cast<float>(x) * CHUNK_SIZE + m_position.x;
+			float z_noise = static_cast<float>(z) * CHUNK_SIZE + m_position.z;
+			int heightSize = CHUNK_SIZE * noise2d.GetNoise(x_noise, z_noise);
+			if (heightSize < 0)
+				heightSize = 0;
 			for (int y = 0; y < CHUNK_SIZE; y++)
 			{
 				unsigned int index = x + z * CHUNK_SIZE + y * CHUNK_SIZE * CHUNK_SIZE;
-				m_voxels[index] = new Voxel(Type::GRASS,index);
+				if (y < heightSize)
+					m_voxels[index] = new Voxel(Type::GRASS, index);
+				else
+					m_voxels[index] = new Voxel(Type::AIR, index);
 			}
 		}
 	}
