@@ -7,11 +7,11 @@
 
 #define ENGINE Engine::getInstance()
 
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+class World;
 
 class Engine : public Singleton<Engine>
 {
-friend class Singleton<Engine>;
+	friend class Singleton<Engine>;
 public:
 	Engine();
 	~Engine();
@@ -23,5 +23,6 @@ public:
 		glViewport(0, 0, width, height);
 	}
 private:
-	GLFWwindow* m_window;
+	World* m_world;
+	float m_elapseTime;
 };

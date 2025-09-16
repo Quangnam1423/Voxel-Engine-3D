@@ -1,0 +1,11 @@
+Model Information:
+* title:	Dead by Daylight - The Animatronic
+* source:	https://sketchfab.com/3d-models/dead-by-daylight-the-animatronic-0db438d8a6bc497eb26922dddb91a8dd
+* author:	MG Rips (https://sketchfab.com/MG_GameRips)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Dead by Daylight - The Animatronic" (https://sketchfab.com/3d-models/dead-by-daylight-the-animatronic-0db438d8a6bc497eb26922dddb91a8dd) by MG Rips (https://sketchfab.com/MG_GameRips) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

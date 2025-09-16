@@ -2,11 +2,14 @@
 
 #include "EngineManager/WindowManager.h"
 #include "EngineManager/InputManager.h"
+#include "EngineManager/ResourceManager.h"
+#include "EngineManager/CameraManager.h"
+#include "Objects/World.h"
 #include <iostream>
 
 Engine::Engine()
 {
-	m_window = nullptr;
+	m_elapseTime = 0.0f;
 }
 
 Engine::~Engine()
@@ -30,13 +33,13 @@ void Engine::init()
 
 	// init window
 	{
-		m_window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, WINDOW_TITLE, NULL, NULL);
-		if (!m_window) {
+		GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, WINDOW_TITLE, NULL, NULL);
+		if (!window) {
 			std::cerr << "Failed to create GLFW window" << std::endl;
 			glfwTerminate();
 			return;
 		}
-		WINDOW_MANAGER->setWindow(m_window);
+		WINDOW_MANAGER->setWindow(window);
 	}
 
 	// load glad
@@ -47,21 +50,48 @@ void Engine::init()
 		}
 	}
 
-	// set viewport
+	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 	{
-		glViewport(0, 0, 800, 600);
-		glfwSetFramebufferSizeCallback(m_window, Engine::framebuffer_size_callback);
+		Camera* camera = new Camera();
+		camera->setPosition(glm::vec3(-173.625f, 67.1448f, 304.56f));
+		camera->setWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
+		camera->setTarget(glm::vec3(-172.715f, 66.734f, 304.613f));
+		CM->setCamera(camera);
+	}
+
+	// init world
+	{
+		m_world = new World();
+	}
+
+	// callback
+	{
+		glfwSetCursorPosCallback(WINDOW_MANAGER->getWindow(), InputManager::mouseCallback);
+			glfwSetKeyCallback(WINDOW_MANAGER->getWindow(), InputManager::keyCallback);
 	}
 }
 
 void Engine::run()
 {
-	while (!glfwWindowShouldClose(m_window)) {
-		INPUT_MANAGER->processInput(m_window);
-
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
+	while (!glfwWindowShouldClose(WINDOW_MANAGER->getWindow())) {
+		float deltaTime = static_cast<float>(glfwGetTime()) - m_elapseTime;
+		m_elapseTime = static_cast<float>(glfwGetTime());
+		//std::cout << "Camera Position: "
+		//	<< CM->getCamera()->getPosition().x << ", "
+		//	<< CM->getCamera()->getPosition().y << ", "
+		//	<< CM->getCamera()->getPosition().z << std::endl;
+		//std::cout << "camera Target: "
+		//	<< CM->getCamera()->getTarget().x << ", "
+		//	<< CM->getCamera()->getTarget().y << ", "
+		//	<< CM->getCamera()->getTarget().z << std::endl;
+		INPUT_MANAGER->processInput(deltaTime);
+		m_world->update(deltaTime);
+		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		m_world->draw();
 		WINDOW_MANAGER->render();
 		INPUT_MANAGER->handleEvent();
 	}
