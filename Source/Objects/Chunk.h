@@ -47,8 +47,8 @@ private:
 	static FastNoiseLite& getNoise() {
 		static FastNoiseLite noise2d;
 		noise2d.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-		noise2d.SetSeed(1337);
-		noise2d.SetFrequency(0.015f);
+		noise2d.SetSeed(rand() % INT_MAX);
+		noise2d.SetFrequency(0.045f);
 		return noise2d;
 	}
 };
