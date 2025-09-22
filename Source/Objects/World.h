@@ -25,7 +25,8 @@ private:
 	void cleanup();
 
 	Skybox* m_skybox;
-	Chunk* m_chunk;
+	ChunkManager* m_chunkManager;
+	//Chunk* m_chunk;
 	//Model* m_model;
 };
 

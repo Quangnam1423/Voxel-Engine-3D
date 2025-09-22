@@ -29,6 +29,7 @@ public:
 	void setPosition(glm::vec3 position) { m_position = position; }
 	void initChunk();
 	void setTexture(GLuint textureId) { m_textureID = textureId; }
+	GLuint getTexture() const { return m_textureID; }
 	std::atomic<bool>& isReadyToDraw() { return m_isReadyToDraw; }
 	std::atomic<bool>& isMeshReady() { return m_isMeshReady; }
 private:
@@ -42,5 +43,13 @@ private:
 	std::mutex m_mutex;
 	std::atomic<bool> m_isReadyToDraw;
 	std::atomic<bool> m_isMeshReady;
+
+	static FastNoiseLite& getNoise() {
+		static FastNoiseLite noise2d;
+		noise2d.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+		noise2d.SetSeed(rand() % INT_MAX);
+		noise2d.SetFrequency(0.045f);
+		return noise2d;
+	}
 };
 

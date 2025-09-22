@@ -5,13 +5,14 @@
 #include "../EngineManager/InputManager.h"
 #include "Skybox.h"
 #include "Chunk.h"
+#include "ChunkManager.h"
 #include "Shader.h"
 #include "../Ingredient/Model.h"
 
 World::World()
 {
 	m_skybox = nullptr;
-	m_chunk = nullptr;
+	//m_chunk = nullptr;
 	init();
 }
 
@@ -22,8 +23,13 @@ World::~World()
 
 void World::update(float deltaTime)
 {
-	if (m_chunk && m_chunk->isMeshReady() && !m_chunk->isReadyToDraw()) {
-		m_chunk->setupMesh();
+	//if (m_chunk && m_chunk->isMeshReady() && !m_chunk->isReadyToDraw()) {
+	//	m_chunk->setupMesh();
+	//}
+	// update camera position
+	{
+		glm::vec3 cameraPos = CM->getCamera()->getPosition();
+		m_chunkManager->Update(deltaTime, cameraPos);
 	}
 }
 
@@ -33,13 +39,19 @@ void World::draw() {
 	float aspect = (float)WINDOW_MANAGER->getWindowSize().width / (float)WINDOW_MANAGER->getWindowSize().height;
 	glm::mat4 projection = glm::perspective(glm::radians(CM->getCamera()->getZoom()), aspect, 0.1f, 500.f);
 
-	if (m_chunk->isReadyToDraw()) {
-		m_chunk->draw(view, projection);
+	//if (m_chunk->isReadyToDraw()) {
+	//	m_chunk->draw(view, projection);
+	//}
+	if (m_chunkManager) {
+		m_chunkManager->DrawVisibleChunks(view, projection);
 	}
-	//m_model->draw(view, projection);
-	glDepthMask(GL_FALSE);
-	m_skybox->draw(view, projection);
-	glDepthMask(GL_TRUE);
+
+	// draw skybox last
+	{
+		glDepthMask(GL_FALSE);
+		m_skybox->draw(view, projection);
+		glDepthMask(GL_TRUE);
+	}
 }
 
 void World::init()
@@ -60,30 +72,26 @@ void World::init()
 		m_skybox->init();
 	}
 
-	//init chunk
-	{
-		m_chunk = new Chunk();
-		m_chunk->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
-		m_chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
-		m_chunk->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-
-		std::thread setupThread([this]() {
-			this->m_chunk->setupChunk();
-			std::cout << "Chunk data prepared in background thread." << std::endl;
-			});
-		setupThread.detach();
-		//m_chunk->setupChunk();
-		//m_chunk->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
-		//m_chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
-		//m_chunk->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	}
-
-	//// init model
+	////init chunk
 	//{
-	//	m_model = DATA->getModel("Resource/Models/backpack/backpack.obj");
-	//	m_model->setShader(new Shader("Resource/Shaders/model.vert", "Resource/Shaders/model.frag"));
-	//	m_model->setPosition({ 0.0f, 20.0f, 15.0f });
+	//	m_chunk = new Chunk();
+	//	m_chunk->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
+	//	m_chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
+	//	m_chunk->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	//	std::thread setupThread([this]() {
+	//		this->m_chunk->setupChunk();
+	//		std::cout << "Chunk data prepared in background thread." << std::endl;
+	//		});
+	//	setupThread.detach();
 	//}
+
+	// init chunk manager
+	{
+		m_chunkManager = new ChunkManager();
+		m_chunkManager->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
+		m_chunkManager->Init(CM->getCamera()->getPosition());
+	}
 }
 
 void World::cleanup()
@@ -92,11 +100,16 @@ void World::cleanup()
 		delete m_skybox;
 		m_skybox = nullptr;
 	}
-	
-	if (m_chunk) {
-		delete m_chunk;
-		m_chunk = nullptr;
+
+	if (m_chunkManager) {
+		delete m_chunkManager;
+		m_chunkManager = nullptr;
 	}
+	
+	//if (m_chunk) {
+	//	delete m_chunk;
+	//	m_chunk = nullptr;
+	//}
 
 	//if (m_model) {
 	//	delete m_model;

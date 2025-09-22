@@ -19,7 +19,7 @@ WindowManager::~WindowManager()
 
 void WindowManager::render()
 {
-	glfwSwapInterval(1);
+	//glfwSwapInterval(1);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glfwSwapBuffers(m_window);
@@ -48,6 +48,9 @@ void WindowManager::setWindow(GLFWwindow* window)
 	int windowPosX = (mode->width - m_windowSize.width) / 2;
 	int windowPosY = (mode->height - m_windowSize.height) / 2;
 	glfwSetWindowPos(m_window, windowPosX, windowPosY);
+
+	// temp	vsync
+	glfwSwapInterval(1);
 }
 
 GLFWwindow* WindowManager::getWindow()
