@@ -10,6 +10,7 @@
 Engine::Engine()
 {
 	m_elapseTime = 0.0f;
+	m_world = nullptr;
 }
 
 Engine::~Engine()
@@ -79,14 +80,6 @@ void Engine::run()
 	while (!glfwWindowShouldClose(WINDOW_MANAGER->getWindow())) {
 		float deltaTime = static_cast<float>(glfwGetTime()) - m_elapseTime;
 		m_elapseTime = static_cast<float>(glfwGetTime());
-		//std::cout << "Camera Position: "
-		//	<< CM->getCamera()->getPosition().x << ", "
-		//	<< CM->getCamera()->getPosition().y << ", "
-		//	<< CM->getCamera()->getPosition().z << std::endl;
-		//std::cout << "camera Target: "
-		//	<< CM->getCamera()->getTarget().x << ", "
-		//	<< CM->getCamera()->getTarget().y << ", "
-		//	<< CM->getCamera()->getTarget().z << std::endl;
 		std::cout << "FPS: " << 1.0f / deltaTime << std::endl;
 		INPUT_MANAGER->processInput(deltaTime);
 		m_world->update(deltaTime);
@@ -100,5 +93,8 @@ void Engine::run()
 
 void Engine::cleanup()
 {
+	if (m_world)
+		delete m_world;
+	m_world = nullptr;
 	glfwTerminate();
 }

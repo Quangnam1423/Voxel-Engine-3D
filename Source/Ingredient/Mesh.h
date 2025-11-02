@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include <vector>
-
 #include "Texture.h"
 #include "ModelVertex.h"
 
@@ -18,20 +17,15 @@ public:
 	std::vector<GLuint> m_indices;
 	std::vector<Texture> m_textures;
 public:
-	Mesh(std::vector<ModelVertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
+	Mesh(std::vector<ModelVertex> vertices, 
+		std::vector<GLuint> indices, 
+		std::vector<Texture> textures);
 	~Mesh();
-
-	void draw(Shader& shader);
-	
+	void draw(Shader& shader);	
 private:
 	void cleanup();
 	void setupMesh();
-
-
-private:
-	
+private:	
 	unsigned int m_numIndices;
 	unsigned int m_vao, m_vbo, m_ebo;
-
 };
-
