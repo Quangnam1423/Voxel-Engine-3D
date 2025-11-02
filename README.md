@@ -25,6 +25,25 @@ This project relies on three core libraries:
 
 ---
 
+## 🛠️ Compile and Run (Windows / Visual Studio)
+
+### Prerequisites
+Before building the project, make sure you have the following installed:
+
+- **Visual Studio 2022** (or newer)  
+- **Desktop development with C++** workload installed  
+  _(You can add this via Visual Studio Installer if missing)_
+
+---
+
+### Build Instructions
+1. **Clone** the repository or download the source code.
+2. **Open Developer Command Prompt for VS 2022** (or launch Visual Studio manually).
+3. Create a build folder:
+   ```bash
+   mkdir build && cd build
+
+
 ## 🗂️ Project Structure
 
 The general structure of the project is as follows:
