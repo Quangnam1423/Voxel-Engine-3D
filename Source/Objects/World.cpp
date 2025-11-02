@@ -71,26 +71,11 @@ void World::init()
 		m_skybox->setTexture(DATA->loadCubemapTexture(faces, "skybox1"));
 		m_skybox->init();
 	}
-
-	////init chunk
-	//{
-	//	m_chunk = new Chunk();
-	//	m_chunk->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
-	//	m_chunk->setTexture(DATA->getTexture("Resource/Texture/blocks4.png"));
-	//	m_chunk->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-
-	//	std::thread setupThread([this]() {
-	//		this->m_chunk->setupChunk();
-	//		std::cout << "Chunk data prepared in background thread." << std::endl;
-	//		});
-	//	setupThread.detach();
-	//}
-
-	// init chunk manager
+	// init ChunkManager
 	{
 		m_chunkManager = new ChunkManager();
 		m_chunkManager->setShader(new Shader("Resource/Shaders/chunk.vert", "Resource/Shaders/chunk.frag"));
-		m_chunkManager->Init(CM->getCamera()->getPosition());
+		//m_chunkManager->Init(CM->getCamera()->getPosition());
 	}
 }
 

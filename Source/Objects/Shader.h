@@ -1,9 +1,9 @@
 #pragma once
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -27,12 +27,9 @@ public:
     void setMat2(const std::string& name, const glm::mat2& mat);
     void setMat3(const std::string& name, const glm::mat3& mat);
     void setMat4(const std::string& name, const glm::mat4& mat);
-
 	void use();
 	GLuint getId();
-
 private:
 	GLuint m_id;
 	void checkCompileErrors(GLuint shader, std::string type);
 };
-

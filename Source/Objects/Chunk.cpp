@@ -20,6 +20,8 @@ Chunk::~Chunk()
 	//	delete m_shader;
 	//	m_shader = nullptr;
 	//}
+	if (m_shader)
+		m_shader = nullptr;
 
 	if (m_chunkMesh) {
 		delete m_chunkMesh;
@@ -30,6 +32,8 @@ Chunk::~Chunk()
 		delete voxel;
 		voxel = nullptr;
 	}
+	m_vertices.clear();
+	m_indices.clear();
 }
 
 void Chunk::setupChunk()

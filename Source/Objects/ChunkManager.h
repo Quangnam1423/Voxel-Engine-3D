@@ -10,10 +10,10 @@
 #include <shared_mutex>
 #include <condition_variable>
 #include <queue>
-#include <future> 
+#include <future>
 #include <unordered_map>
 
-#define DISTANCE_TO_LOAD 8
+#define DISTANCE_TO_LOAD 10
 
 class Chunk;
 class Shader;
@@ -41,13 +41,16 @@ public:
 
 	void Update(float detlaTime, const glm::vec3& cameraPosition);
     void DrawVisibleChunks(const glm::mat4& view, const glm::mat4& projection);
-    void Init(const glm::vec3& cameraPosition);
     void Stop();
 	void setShader(Shader* shader) { m_shader = shader; }
 private:
+    void initWorkerThread();
+    void updateChunkMap();
+private:
     // map to manage chunks
 	std::unordered_map<std::tuple<int, int, int>, Chunk*, Tuple3DHasher> m_chunks;
-	std::mutex m_chunksMapMutex;
+    // modify std::mutex -> std::shared_mutex for now
+	std::shared_mutex m_chunksMapMutex; 
     // chunk load queue and mutex
     std::queue <std::tuple<int, int, int> > m_chunkLoadQueue;
 	std::mutex m_loadQueueMutex;

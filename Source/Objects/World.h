@@ -26,7 +26,5 @@ private:
 
 	Skybox* m_skybox;
 	ChunkManager* m_chunkManager;
-	//Chunk* m_chunk;
-	//Model* m_model;
 };
 
